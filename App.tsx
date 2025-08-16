@@ -6,14 +6,14 @@
  */
 
 import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
-
+import HomePage from './screens/home_page/Home';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Text>Hello</Text>
+      <HomePage/>
     </View>
   );
 }
