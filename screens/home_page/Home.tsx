@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import TopAppBar from '../../components/TopAppBar';
-import BottomNavigation from '../../components/BottomNavigation';
-import DayContainer from '../../components/DayContainer';
-import EventCard from '../../components/EventCard';
+import {TopAppBar} from '../../components/topAppBar/TopAppBar';
+import BottomNavigation from '../../components/bottomNavigation/BottomNavigation';
+import {DayContainer} from '../../components/dayContainer/DayContainer';
+import {EventCard} from '../../components/eventCard/EventCard';
 
 const HomePage = () => {
   const [selectedDay, setSelectedDay] = useState(3);
@@ -28,7 +28,13 @@ const HomePage = () => {
   return (
     <View style={styles.container}>
       {/* Top App Bar */}
-      <TopAppBar username="Jayaswaroopa" />
+      <TopAppBar name='jaya' roll={789}>
+        <Text>sjhjn</Text>
+        <Text>ishn</Text>
+        <View><Text>
+          jhsjn
+          </Text></View>
+      </TopAppBar>
 
       <ScrollView style={styles.body}>
         <Text style={styles.header}>July 03, Wed</Text>
