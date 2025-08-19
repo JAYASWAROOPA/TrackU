@@ -6,6 +6,7 @@
  */
 
 import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import SignInpage from './Screens/signInPage/SignInpage';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -13,7 +14,7 @@ function App() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Text>Hello</Text>
+      <SignInpage/>
     </View>
   );
 }
