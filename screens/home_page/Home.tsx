@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import {TopAppBar} from '../../components/topAppBar/TopAppBar';
-import BottomNavigation from '../../components/bottomNavigation/BottomNavigation';
-import {DayContainer} from '../../components/dayContainer/DayContainer';
-import {EventCard} from '../../components/eventCard/EventCard';
+import { TopAppBar } from '../../components/topAppBar/TopAppBar';
+import { DayContainer } from '../../components/dayContainer/DayContainer';
+import { EventCard } from '../../components/eventCard/EventCard';
 
 const HomePage = () => {
   const [selectedDay, setSelectedDay] = useState(3);
@@ -19,23 +18,61 @@ const HomePage = () => {
   ];
 
   const events = [
-    { timeRemaining: '25 mins to go', taskTime: '8:25', title: 'PS - C Programming', description: 'If description add here...', bgColor: '#fbe9f7' },
-    { timeRemaining: '25 mins to go', taskTime: '8:25', title: 'PS - C Programming', description: 'If description add here...', bgColor: '#f3fbe9' },
-    { timeRemaining: '25 mins to go', taskTime: '8:25', title: 'PS - C Programming', description: 'If description add here...', bgColor: '#fbe9f7' },
-    { timeRemaining: '25 mins to go', taskTime: '8:25', title: 'PS - C Programming', description: 'If description add here...', bgColor: '#f3fbe9' },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#fbe9f7',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#f3fbe9',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#fbe9f7',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#f3fbe9',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#fbe9f7',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#fbe9f7',
+    },
+    {
+      timeRemaining: '25 mins to go',
+      taskTime: '8:25',
+      title: 'PS - C Programming',
+      description: 'If description add here...',
+      bgColor: '#fbe9f7',
+    },
   ];
 
   return (
     <View style={styles.container}>
       {/* Top App Bar */}
-      <TopAppBar name='jaya' roll={789}>
-        <Text>sjhjn</Text>
-        <Text>ishn</Text>
-        <View><Text>
-          jhsjn
-          </Text></View>
-      </TopAppBar>
-
+      <TopAppBar name="Jayaswaroopa" />
       <ScrollView style={styles.body}>
         <Text style={styles.header}>July 03, Wed</Text>
 
@@ -66,9 +103,6 @@ const HomePage = () => {
           />
         ))}
       </ScrollView>
-
-      {/* Bottom Navigation */}
-      <BottomNavigation />
     </View>
   );
 };
@@ -84,17 +118,17 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 18,
-    marginBottom: 10,
-    fontWeight: 'bold',
+    color: '#666667',
   },
   daysRow: {
     flexDirection: 'row',
     marginVertical: 10,
   },
   subHeader: {
-    fontSize: 16,
-    marginVertical: 10,
-    fontWeight: 'bold',
+    fontSize: 22,
+    marginBottom: 10,
+    fontWeight: '500',
+    color: '#666667',
   },
 });
 

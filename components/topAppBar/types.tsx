@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
 
 export type TTopBar = {
-  children : ReactNode; 
-  name : string;
-  roll : number;
-  
+  children ?: ReactNode; 
+  name ?: string
 };

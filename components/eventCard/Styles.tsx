@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
     card: {
-    padding: 12,
+    padding: 13,
     marginVertical: 6,
     borderRadius: 10,
     elevation: 3,
@@ -11,21 +11,21 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   timeRemaining: {
-    fontSize: 13,
-    color: '#555',
+    fontSize: 16,
+    color: '#393939',
   },
   taskTime: {
-    fontSize: 13,
-    color: '#555',
+    fontSize: 16,
+    color: '#393939',
   },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4A1F2A',
+    fontSize: 21,
+    fontWeight: '500',
+    color: '#40031D',
     marginVertical: 4,
   },
   description: {
-    fontSize: 13,
-    color: '#777',
+    fontSize: 16,
+    color: '#666667',
   },
 })

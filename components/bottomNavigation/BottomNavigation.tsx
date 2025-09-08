@@ -1,28 +1,32 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import {styles} from './Styles'
+import { styles } from './Styles';
+import { HomeIcon } from '../../assets/HomeIcon';
+import { Calender } from '../../assets/Calender';
+import { ToDo } from '../../assets/ToDo';
+import { Add } from '../../assets/AddCircle';
+import { Settings } from '../../assets/Settings';
 
 const BottomNavigation = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-        {/* <Ionicons name="home" size={26} color="red" /> */}
+        <HomeIcon width={30} height={30} />
       </TouchableOpacity>
       <TouchableOpacity>
-        {/* <Ionicons name="calendar" size={26} color="white" /> */}
+        <Calender width={26} height={26} />
       </TouchableOpacity>
       <TouchableOpacity>
-        {/* <Ionicons name="checkbox" size={26} color="white" /> */}
+        <Add width={31} height={31} />
       </TouchableOpacity>
       <TouchableOpacity>
-        {/* <Ionicons name="pencil" size={26} color="white" /> */}
+        <ToDo width={27} height={27} />
       </TouchableOpacity>
       <TouchableOpacity>
-        {/* <Ionicons name="settings" size={26} color="white" /> */}
+        <Settings width={26} height={26} />
       </TouchableOpacity>
     </View>
   );
 };
-
 
 export default BottomNavigation;

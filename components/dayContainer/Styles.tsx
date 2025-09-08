@@ -1,22 +1,27 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
-    container: {
+  container: {
     alignItems: 'center',
-    marginHorizontal: 6,
-    padding: 8,
-    borderRadius: 20,
+    marginHorizontal: 4,
+    borderRadius: 21,
+    width: 48,
+    height: 63,
+    justifyContent: 'center',
   },
   selected: {
-    backgroundColor: 'green',
+    backgroundColor: '#4a0dd6',
   },
   day: {
-    color: 'red',
-    fontWeight: 'bold',
+    color: '#2D3142', 
+    fontSize: 18,
+    fontWeight: '500',
   },
   date: {
-    color: 'red',
+    color: '#2D3142', 
+    fontSize: 18,
+    fontWeight: '600',
   },
   selectedText: {
-    color: 'white',
+    color: '#FFFFFF', 
   },
-})
+});
