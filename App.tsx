@@ -1,13 +1,16 @@
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import HomePage from './screens/home_page/Home';
+import CalendarPage from './screens/home_page/calendar/calendar_page';
+import Profilepage from './screens/home_page/profile/profilepage';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <HomePage/>
+      {/* <CalendarPage />  */}
       
+      <Profilepage/> 
     </View>
   );
 }
