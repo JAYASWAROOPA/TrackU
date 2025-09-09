@@ -9,6 +9,10 @@ import SetUp from './screens/setUpPage/SetUpPage';
 import { Add } from './assets/AddCircle';
 import ToDoList from './screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
+import { Calender } from './assets/Calender';
+import CalendarPage from './screens/calendar/calendar_page';
+import Profilepage from './screens/profile/profilepage';
+import { Settings } from './assets/Settings';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -67,6 +71,32 @@ export default function App() {
           options={{
             tabBarIcon: ({ focused }) => (
               <ToDo
+                width={33}
+                height={33}
+                fill={focused ? 'white' : 'lightgray'}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Calender"
+          component={CalendarPage}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Calender
+                width={33}
+                height={33}
+                fill={focused ? 'white' : 'lightgray'}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profilepage"
+          component={Profilepage}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Settings
                 width={33}
                 height={33}
                 fill={focused ? 'white' : 'lightgray'}
