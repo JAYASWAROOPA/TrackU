@@ -7,6 +7,8 @@ import HomePage from './screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
 import SetUp from './screens/setUpPage/SetUpPage';
 import { Add } from './assets/AddCircle';
+import ToDoList from './screens/todolist/ToDolist';
+import { ToDo } from './assets/ToDo';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -52,6 +54,19 @@ export default function App() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Add
+                width={33}
+                height={33}
+                fill={focused ? 'white' : 'lightgray'}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="TodoList"
+          component={ToDoList}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <ToDo
                 width={33}
                 height={33}
                 fill={focused ? 'white' : 'lightgray'}
