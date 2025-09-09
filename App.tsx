@@ -8,7 +8,7 @@ function App() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {/* <CalendarPage />  */}
+    {/* <CalendarPage />   */}
       
       <Profilepage/> 
     </View>
