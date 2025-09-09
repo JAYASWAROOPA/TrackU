@@ -5,78 +5,47 @@ import { DayContainer } from '../../components/dayContainer/DayContainer';
 import { EventCard } from '../../components/eventCard/EventCard';
 
 const HomePage = () => {
-  const [selectedDay, setSelectedDay] = useState(3);
+  const today = new Date()
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const currentDate = today.getDate();
+  const formattedDate = today.toLocaleDateString('en-US', {
+    month: 'long',
+    day: '2-digit',
+    weekday: 'short',
+  });
 
-  const days = [
-    { day: 'Mon', date: 1 },
-    { day: 'Tue', date: 2 },
-    { day: 'Wed', date: 3 },
-    { day: 'Thu', date: 4 },
-    { day: 'Fri', date: 5 },
-    { day: 'Sat', date: 6 },
-    { day: 'Sun', date: 7 },
-  ];
+  const [selectedDay, setSelectedDay] = useState(currentDate);
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(today.getDate() - today.getDay() + i); 
+    return {
+      day: weekDays[d.getDay()],
+      date: d.getDate(),
+    };
+  });
 
   const events = [
     {
-      timeRemaining: '25 mins to go',
+      timeRemaining: '25 mins to go ⏳',
       taskTime: '8:25',
       title: 'PS - C Programming',
       description: 'If description add here...',
       bgColor: '#fbe9f7',
     },
     {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#f3fbe9',
-    },
-    {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#fbe9f7',
-    },
-    {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#f3fbe9',
-    },
-    {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#fbe9f7',
-    },
-    {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#fbe9f7',
-    },
-    {
-      timeRemaining: '25 mins to go',
-      taskTime: '8:25',
-      title: 'PS - C Programming',
-      description: 'If description add here...',
-      bgColor: '#fbe9f7',
+      timeRemaining: '1 hr left ⏳',
+      taskTime: '10:30',
+      title: 'Team Meeting',
+      description: 'Sync with team about project tasks.',
+      bgColor: '#e9f7fb',
     },
   ];
 
   return (
     <View style={styles.container}>
-      {/* Top App Bar */}
       <TopAppBar name="Jayaswaroopa" />
       <ScrollView style={styles.body}>
-        <Text style={styles.header}>July 03, Wed</Text>
-
-        {/* Days Row */}
+        <Text style={styles.header}>{formattedDate}</Text>
         <View style={styles.daysRow}>
           {days.map((d, index) => (
             <DayContainer
@@ -89,9 +58,7 @@ const HomePage = () => {
           ))}
         </View>
 
-        <Text style={styles.subHeader}>Today event</Text>
-
-        {/* Events */}
+        <Text style={styles.subHeader}>Today’s events</Text>
         {events.map((event, index) => (
           <EventCard
             key={index}

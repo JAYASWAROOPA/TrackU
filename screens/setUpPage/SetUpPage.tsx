@@ -1,40 +1,55 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import { EventCard } from '../../components/eventCard/EventCard';
 import { AddIcon } from '../../assets/AddIcon';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+type NewEvent = {
+  date: string;
+  taskTime: string;
+  title: string;
+  description: string;
+};
 
-const HomePage = () => {
-  const [events, setEvents] = useState([
-    {
-      date: '08-09-2025',
-      taskTime: '8:25',
-      title: 'Washing hair',
-      description: 'If description add here...',
-      bgColor: '#fbe9f7',
-    },
-  ]);
+type EventItem = NewEvent & { bgColor: string };
+
+const HomePage: React.FC = () => {
+  const [events, setEvents] = useState<EventItem[]>([]);
 
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Inputs for new event
-  const [newEvent, setNewEvent] = useState({
+  const [newEvent, setNewEvent] = useState<NewEvent>({
     date: '',
     taskTime: '',
     title: '',
     description: '',
   });
 
+  const colors: string[] = ['#f3fbe9', '#e9f1fb', '#fbe9f1', '#fff3e0', '#ede7f6'];
+
   const handleAddEvent = () => {
-    if (!newEvent.title.trim()) return; // at least require a title
-    setEvents([...events, { ...newEvent, bgColor: '#f3fbe9' }]);
-    setNewEvent({ date: '', taskTime: '', title: '', description: '' }); // reset inputs
+    if (!newEvent.title.trim()) return;
+
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    setEvents(prev => [...prev, { ...newEvent, bgColor: randomColor }]);
+
+    setNewEvent({ date: '', taskTime: '', title: '', description: '' });
     setModalVisible(false);
   };
 
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
   return (
     <View style={styles.container}>
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchBar}
@@ -44,32 +59,36 @@ const HomePage = () => {
         />
       </View>
 
-      {/* Events */}
       <View style={styles.additionalContainer}>
         <ScrollView style={styles.body}>
           <Text style={styles.subHeader}>All events</Text>
-          {events.map((event, index) => (
-            <EventCard
-              key={index}
-              timeRemaining={event.date}
-              taskTime={event.taskTime}
-              title={event.title}
-              description={event.description}
-              bgColor={event.bgColor}
-            />
-          ))}
+
+          {events.length > 0 ? (
+            events.map((event, index) => (
+              <EventCard
+                key={index}
+                timeRemaining={event.date}
+                taskTime={event.taskTime}
+                title={event.title}
+                description={event.description}
+                bgColor={event.bgColor}
+              />
+            ))
+          ) : (
+            <View style={{ marginTop: 40, alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, color: '#999' }}>No events found</Text>
+            </View>
+          )}
         </ScrollView>
 
-        {/* Add Button */}
         <TouchableOpacity style={styles.add} onPress={() => setModalVisible(true)}>
           <AddIcon />
         </TouchableOpacity>
       </View>
 
-      {/* Modal for Adding Event */}
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -77,37 +96,84 @@ const HomePage = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalHeader}>Add New Event</Text>
 
-            <TextInput
-              style={styles.input}
-              placeholder="Date (DD-MM-YYYY)"
-              value={newEvent.date}
-              onChangeText={(text) => setNewEvent({ ...newEvent, date: text })}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Time (HH:MM)"
-              value={newEvent.taskTime}
-              onChangeText={(text) => setNewEvent({ ...newEvent, taskTime: text })}
-            />
+            {/* Date */}
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <TextInput
+                style={styles.input}
+                placeholder="Pick Date"
+                value={newEvent.date}
+                editable={false}
+              />
+            </TouchableOpacity>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={new Date()}
+                mode="date"
+                display="default"
+                onChange={(e: DateTimePickerEvent, selectedDate?: Date) => {
+                  setShowDatePicker(false);
+                  if (selectedDate) {
+                    const formatted = selectedDate.toLocaleDateString('en-GB'); // DD/MM/YYYY
+                    setNewEvent(prev => ({ ...prev, date: formatted }));
+                  }
+                }}
+              />
+            )}
+
+            {/* Time */}
+            <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+              <TextInput
+                style={styles.input}
+                placeholder="Pick Time"
+                value={newEvent.taskTime}
+                editable={false}
+              />
+            </TouchableOpacity>
+
+            {showTimePicker && (
+              <DateTimePicker
+                value={new Date()}
+                mode="time"
+                display="default"
+                onChange={(e: DateTimePickerEvent, selectedTime?: Date) => {
+                  setShowTimePicker(false);
+                  if (selectedTime) {
+                    const formatted = selectedTime.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    });
+                    setNewEvent(prev => ({ ...prev, taskTime: formatted }));
+                  }
+                }}
+              />
+            )}
+
             <TextInput
               style={styles.input}
               placeholder="Event Title"
               value={newEvent.title}
-              onChangeText={(text) => setNewEvent({ ...newEvent, title: text })}
+              onChangeText={text => setNewEvent(prev => ({ ...prev, title: text }))}
             />
             <TextInput
               style={[styles.input, { height: 80 }]}
               placeholder="Description"
               multiline
               value={newEvent.description}
-              onChangeText={(text) => setNewEvent({ ...newEvent, description: text })}
+              onChangeText={text => setNewEvent(prev => ({ ...prev, description: text }))}
             />
 
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#400AD6' }]} onPress={handleAddEvent}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#400AD6' }]}
+                onPress={handleAddEvent}
+              >
                 <Text style={styles.buttonText}>Add</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#999' }]} onPress={() => setModalVisible(false)}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#999' }]}
+                onPress={() => setModalVisible(false)}
+              >
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -118,10 +184,16 @@ const HomePage = () => {
   );
 };
 
+// ---- Styles ----
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   body: { flex: 1, padding: 16 },
-  subHeader: { fontSize: 22, marginBottom: 10, fontWeight: '500', color: '#666667' },
+  subHeader: {
+    fontSize: 22,
+    marginBottom: 10,
+    fontWeight: '500',
+    color: '#666667',
+  },
   searchBar: {
     height: 45,
     borderRadius: 8,
@@ -182,7 +254,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
   },
-  modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
   button: {
     flex: 1,
     marginHorizontal: 5,
