@@ -1,0 +1,78 @@
+import { StyleSheet } from 'react-native'
+
+
+export const styles = StyleSheet.create({
+    container:{
+        flex:1,
+    },
+    text:{
+        fontFamily:"mada",
+    fontSize:25,
+    color:"white",
+    position: "relative",
+    top:188,              
+    left:20, 
+    width:200,
+    height:31,
+ },
+ input:{
+ position:"relative",
+ width:"90%",
+ height:62,
+ top:200,
+ left:20,
+ borderRadius:10,
+ backgroundColor:"white",
+ },
+ pass:{
+    fontFamily:"mada",
+    fontSize:25,
+    color:"white",
+    position: "relative",
+    top:220,              
+    left:20, 
+    width:200,
+    height:31,
+ },
+ password:{
+     position:"relative",
+ width:"90%",
+ height:62,
+ top:230,
+ left:20,
+ borderRadius:10,
+ backgroundColor:"white",
+ },
+ linkText:{
+ position:"relative",
+    fontSize:18,
+    fontFamily:"mada",
+    color:"white",
+width:"90%",
+ height:62,
+ top:280,
+ left:20,
+ },
+ button: {
+  marginTop:350,
+  width:230,
+  backgroundColor: '#fff',  
+  paddingVertical: 15,   
+  left:80,    
+  borderRadius: 20,          
+  alignItems: 'center',      
+  justifyContent: 'center',  
+  shadowColor: '#000',      
+  shadowOffset: { width:0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+  elevation: 5,              
+},
+
+buttonText: {
+  color: '#4c00c9',         
+  fontSize: 20,
+  fontWeight: 'bold',
+},
+})
+
