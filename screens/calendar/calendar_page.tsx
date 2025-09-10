@@ -17,7 +17,6 @@ export default function CalendarPage() {
     "July","August","September","October","November","December"
   ];
 
-  // Build calendar grid
   const weeks = useMemo(() => {
     
     const year = selectedDate.getFullYear();
@@ -49,7 +48,7 @@ export default function CalendarPage() {
     setModalVisible(false);
   };
 
-  // Month navigation
+
   const goToPrevMonth = () => {
     const year = selectedDate.getMonth() === 0 ? selectedDate.getFullYear() - 1 : selectedDate.getFullYear();
     const month = selectedDate.getMonth() === 0 ? 11 : selectedDate.getMonth() - 1;
@@ -84,7 +83,7 @@ export default function CalendarPage() {
   return (
     <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
 
-      {/* Month & Year navigation */}
+     
       <View style={styles.header}>
         <TouchableOpacity onPress={goToPrevMonth}>
           <Text style={styles.navButton}>{"<"}</Text>
@@ -99,7 +98,6 @@ export default function CalendarPage() {
         </TouchableOpacity>
       </View>
 
-      {/* Calendar grid */}
       <View style={styles.calendar}>
         <View style={styles.weekHeaderRow}>
           {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => (
@@ -147,7 +145,7 @@ export default function CalendarPage() {
         ))}
       </View>
 
-      {/* Events List */}
+    
       <View style={styles.eventsContainer}>
         <Text style={styles.eventsTitle}>
           Events on {selectedDate.getDate()}-{selectedDate.getMonth() + 1}-{selectedDate.getFullYear()}
@@ -155,12 +153,12 @@ export default function CalendarPage() {
         {renderEvents()}
       </View>
 
-      {/* Add Event Button */}
+
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <AddIcon/>
       </TouchableOpacity>
 
-      {/* Modal for adding event */}
+      
       <Modal
         animationType="slide"
         transparent

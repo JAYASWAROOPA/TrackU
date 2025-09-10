@@ -1,7 +1,13 @@
+// App.tsx
 import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Profilepage from "./screens/profile/profilepage";
+import HelpScreen from "./screens/profile/HelpScreen";
+
 
 import HomePage from './screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
@@ -11,9 +17,20 @@ import ToDoList from './screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
 import CalendarPage from './screens/calendar/calendar_page';
-import Profilepage from './screens/profile/profilepage';
 import { Settings } from './assets/Settings';
+
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+// 👇 Profile stack including HelpScreen
+function ProfileStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profilepage" component={Profilepage} />
+      <Stack.Screen name="HelpScreen" component={HelpScreen} />
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -91,9 +108,10 @@ export default function App() {
             ),
           }}
         />
+        {/* 👇 Use the ProfileStack instead of Profilepage directly */}
         <Tab.Screen
-          name="Profilepage"
-          component={Profilepage}
+          name="Profile"
+          component={ProfileStack}
           options={{
             tabBarIcon: ({ focused }) => (
               <Settings
