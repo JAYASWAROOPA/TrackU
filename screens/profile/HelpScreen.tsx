@@ -14,9 +14,14 @@ export default function HelpScreen() {
   return (
     <ScrollView style={styles.container}>
       {/* Back button */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-        <Text style={styles.backText}>⬅ Back</Text>
-      </TouchableOpacity>
+     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+  <View style={styles.backContent}>
+    <Text style={styles.arrow}>⬅</Text>
+    <Text style={styles.backText}>Back</Text>
+  </View>
+</TouchableOpacity>
+
+
 
       <Text style={styles.title}>Help & Support – CampusTrack</Text>
 
@@ -61,9 +66,34 @@ export default function HelpScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-  backBtn: { marginBottom: 10 },
-  backText: { color: "#4c1d95", fontSize: 16, fontWeight: "600" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 12, color: "#111" },
+  backBtn: {
+  paddingVertical: 10,
+  paddingHorizontal: 15,
+  backgroundColor: "#7350cc",
+  borderRadius: 8,
+  alignSelf: "flex-start",
+  margin: 10,
+},
+backContent: {
+  flexDirection: "row",
+  alignItems: "center",  // 🔹 ensures arrow and text are vertically aligned
+},
+arrow: {
+  fontSize: 16,
+  color: "#fff",
+  marginRight: 2, 
+  textAlign:"center",
+  top:-2
+   // space between arrow and text
+},
+backText: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#fff",
+},
+
+
+  title: { fontSize: 20, fontWeight: "bold", marginBottom: 14, color: "#111",marginTop:9 },
   subtitle: {
     fontSize: 16,
     fontWeight: "600",

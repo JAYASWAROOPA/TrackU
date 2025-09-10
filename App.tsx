@@ -18,7 +18,7 @@ import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
 import CalendarPage from './screens/calendar/calendar_page';
 import { Settings } from './assets/Settings';
-
+import ChangePassword from './screens/profile/ChangePassword';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -28,6 +28,7 @@ function ProfileStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profilepage" component={Profilepage} />
       <Stack.Screen name="HelpScreen" component={HelpScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 }
