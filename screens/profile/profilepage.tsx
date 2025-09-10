@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    padding: 20,
+    padding: 19,
   },
   headerText: {
     color: "white",
