@@ -4,18 +4,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomePage from './Screens/home_page/Home';
+import HomePage from './screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
-import SetUp from './Screens/setUpPage/SetUpPage';
+import SetUp from './screens/setUpPage/SetUpPage';
 import { Add } from './assets/AddCircle';
-import ToDoList from './Screens/todolist/ToDolist';
+import ToDoList from './screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
-import CalendarPage from './Screens/calendar/calendar_page';
-import Profilepage from './Screens/profile/profilepage';
+import CalendarPage from './screens/calendar/calendar_page';
+import Profilepage from './screens/profile/profilepage';
 import { Settings } from './assets/Settings';
-import Sign from './Screens/loginPage/login';
-import Login from './Screens/signUpPage/signin';
+import Sign from './screens/loginPage/login';
+import Login from './screens/signUpPage/signin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
