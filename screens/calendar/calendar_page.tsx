@@ -47,7 +47,7 @@ export default function CalendarPage() {
     setModalVisible(false);
   };
 
-  // Month navigation
+
   const goToPrevMonth = () => {
     const year = selectedDate.getMonth() === 0 ? selectedDate.getFullYear() - 1 : selectedDate.getFullYear();
     const month = selectedDate.getMonth() === 0 ? 11 : selectedDate.getMonth() - 1;
@@ -82,6 +82,7 @@ export default function CalendarPage() {
   return (
     <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
 
+     
       <View style={styles.header}>
         <TouchableOpacity onPress={goToPrevMonth}>
           <Text style={styles.navButton}>{"<"}</Text>
@@ -143,6 +144,7 @@ export default function CalendarPage() {
         ))}
       </View>
 
+    
       <View style={styles.eventsContainer}>
         <Text style={styles.eventsTitle}>
           Events on {selectedDate.getDate()}-{selectedDate.getMonth() + 1}-{selectedDate.getFullYear()}
@@ -154,6 +156,7 @@ export default function CalendarPage() {
         <AddIcon/>
       </TouchableOpacity>
 
+      
       <Modal
         animationType="slide"
         transparent

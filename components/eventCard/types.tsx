@@ -3,5 +3,6 @@ export type TEventCard = {
     taskTime : string, 
     title : string, 
     description : string, 
-    bgColor : string
+    bgColor : string,
+    onEdit?: () => void;
 };

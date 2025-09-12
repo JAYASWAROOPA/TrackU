@@ -10,7 +10,9 @@ import {
 } from 'react-native';
 import { EventCard } from '../../components/eventCard/EventCard';
 import { AddIcon } from '../../assets/AddIcon';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 type NewEvent = {
   date: string;
   taskTime: string;
@@ -20,7 +22,7 @@ type NewEvent = {
 
 type EventItem = NewEvent & { bgColor: string };
 
-const HomePage: React.FC = () => {
+const SetUPpage: React.FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
 
   const [searchText, setSearchText] = useState('');
@@ -32,19 +34,37 @@ const HomePage: React.FC = () => {
     title: '',
     description: '',
   });
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const colors: string[] = ['#f3fbe9', '#e9f1fb', '#fbe9f1', '#fff3e0', '#ede7f6'];
-
-  const handleAddEvent = () => {
+  const handleSaveEvent = () => {
     if (!newEvent.title.trim()) return;
 
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setEvents(prev => [...prev, { ...newEvent, bgColor: randomColor }]);
+    if (editingIndex !== null) {
+      // update existing
+      setEvents(prev => {
+        const updated = [...prev];
+        updated[editingIndex] = { ...updated[editingIndex], ...newEvent };
+        return updated;
+      });
+    } else {
+      // add new
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setEvents(prev => [...prev, { ...newEvent, bgColor: randomColor }]);
+    }
 
     setNewEvent({ date: '', taskTime: '', title: '', description: '' });
+    setEditingIndex(null);
     setModalVisible(false);
   };
 
+  const colors: string[] = [
+    '#f3fbe9',
+    '#e9f1fb',
+    '#fbe9f1',
+    '#fff3e0',
+    '#ede7f6',
+  ];
+  
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
@@ -72,16 +92,31 @@ const HomePage: React.FC = () => {
                 title={event.title}
                 description={event.description}
                 bgColor={event.bgColor}
+                onEdit={() => {
+                  setNewEvent({
+                    date: event.date,
+                    taskTime: event.taskTime,
+                    title: event.title,
+                    description: event.description,
+                  });
+                  setEditingIndex(index);
+                  setModalVisible(true);
+                }}
               />
             ))
           ) : (
             <View style={{ marginTop: 40, alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, color: '#999' }}>No events found</Text>
+              <Text style={{ fontSize: 16, color: '#999' }}>
+                No events found
+              </Text>
             </View>
           )}
         </ScrollView>
 
-        <TouchableOpacity style={styles.add} onPress={() => setModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.add}
+          onPress={() => setModalVisible(true)}
+        >
           <AddIcon />
         </TouchableOpacity>
       </View>
@@ -151,23 +186,30 @@ const HomePage: React.FC = () => {
               style={styles.input}
               placeholder="Event Title"
               value={newEvent.title}
-              onChangeText={text => setNewEvent(prev => ({ ...prev, title: text }))}
+              onChangeText={text =>
+                setNewEvent(prev => ({ ...prev, title: text }))
+              }
             />
             <TextInput
               style={[styles.input, { height: 80 }]}
               placeholder="Description"
               multiline
               value={newEvent.description}
-              onChangeText={text => setNewEvent(prev => ({ ...prev, description: text }))}
+              onChangeText={text =>
+                setNewEvent(prev => ({ ...prev, description: text }))
+              }
             />
 
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: '#400AD6' }]}
-                onPress={handleAddEvent}
+                onPress={handleSaveEvent} // ✅ use this
               >
-                <Text style={styles.buttonText}>Add</Text>
+                <Text style={styles.buttonText}>
+                  {editingIndex !== null ? 'Update' : 'Add'}
+                </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: '#999' }]}
                 onPress={() => setModalVisible(false)}
@@ -266,4 +308,4 @@ const styles = StyleSheet.create({
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '500' },
 });
 
-export default HomePage;
+export default SetUPpage;
