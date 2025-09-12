@@ -98,8 +98,7 @@ export const styles = StyleSheet.create({
   right: 30,
   width: 60,
   height: 60,
-  borderRadius: 12, // rounded box corners instead of circle
-  backgroundColor: "#ffffffff", // contrast: emerald green (pairs well with pink/purple theme)
+  borderRadius: 12, 
   justifyContent: 'center',
   alignItems: 'center',
   elevation: 8,

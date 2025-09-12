@@ -1,8 +1,13 @@
+// App.tsx
 import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import ChangePassword from './screens/profile/ChangePassword';
+import Profilepage from './screens/profile/profilepage';
+import HelpScreen from './screens/profile/HelpScreen';
 
 import HomePage from './screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
@@ -12,7 +17,6 @@ import ToDoList from './screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
 import CalendarPage from './screens/calendar/calendar_page';
-import Profilepage from './screens/profile/profilepage';
 import { Settings } from './assets/Settings';
 import Sign from './screens/loginPage/login';
 import Login from './screens/signUpPage/signin';
@@ -20,8 +24,21 @@ import Login from './screens/signUpPage/signin';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+// 👇 Profile stack including HelpScreen
+function ProfileStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profilepage" component={Profilepage} />
+      <Stack.Screen name="HelpScreen" component={HelpScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+    </Stack.Navigator>
+  );
+}
+
+// 👇 Bottom Tab Navigator
 function BottomTabs({ route }: any) {
-   const { username } = route.params;
+  const { username } = route.params || {}; // optional params
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -42,50 +59,73 @@ function BottomTabs({ route }: any) {
       }}
     >
       <Tab.Screen
-  name="Home"
-  options={{
-    tabBarIcon: ({ focused }) => (
-      <HomeIcon width={33} height={33} fill={focused ? 'white' : 'lightgray'} />
-    ),
-  }}
->
-  {() => <HomePage username={username} />}
-</Tab.Screen>
-
+        name="Home"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <HomeIcon
+              width={33}
+              height={33}
+              fill={focused ? 'white' : 'lightgray'}
+            />
+          ),
+        }}
+      >
+        {() => <HomePage username={username} />}
+      </Tab.Screen>
 
       <Tab.Screen
         name="SetUp"
         component={SetUp}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Add width={33} height={33} fill={focused ? 'white' : 'lightgray'} />
+            <Add
+              width={33}
+              height={33}
+              fill={focused ? 'white' : 'lightgray'}
+            />
           ),
         }}
       />
+
       <Tab.Screen
         name="TodoList"
         component={ToDoList}
         options={{
           tabBarIcon: ({ focused }) => (
-            <ToDo width={33} height={33} fill={focused ? 'white' : 'lightgray'} />
+            <ToDo
+              width={33}
+              height={33}
+              fill={focused ? 'white' : 'lightgray'}
+            />
           ),
         }}
       />
+
       <Tab.Screen
         name="Calender"
         component={CalendarPage}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Calender width={33} height={33} fill={focused ? 'white' : 'lightgray'} />
+            <Calender
+              width={33}
+              height={33}
+              fill={focused ? 'white' : 'lightgray'}
+            />
           ),
         }}
       />
+
+      {/* 👇 Profile uses nested stack */}
       <Tab.Screen
-        name="Profilepage"
-        component={Profilepage}
+        name="Profile"
+        component={ProfileStack}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Settings width={33} height={33} fill={focused ? 'white' : 'lightgray'} />
+            <Settings
+              width={33}
+              height={33}
+              fill={focused ? 'white' : 'lightgray'}
+            />
           ),
         }}
       />
@@ -99,7 +139,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Stack.Navigator screenOptions={{ headerShown: false }}> 
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Sign" component={Login} />
         <Stack.Screen name="Login" component={Sign} />
         <Stack.Screen name="MainTabs" component={BottomTabs} />
