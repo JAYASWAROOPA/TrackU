@@ -30,14 +30,11 @@ export default function Profilepage() {
       colors={["#4c1d95", "#ec4899"]}
       style={profileStyles.container}
     >
-      {/* Header */}
       <View style={profileStyles.header}>
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
         
         </Text>
       </View>
-
-      {/* Profile section */}
       <View style={profileStyles.profileSection}>
         <Image
           source={{ uri: "https://via.placeholder.com/100" }}
@@ -46,7 +43,6 @@ export default function Profilepage() {
         <Text style={profileStyles.username}>NAME</Text>
       </View>
 
-      {/* Menu */}
       <View style={profileStyles.menuContainer}>
         <FlatList
           data={menuItems}

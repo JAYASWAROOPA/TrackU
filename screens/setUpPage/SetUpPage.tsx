@@ -96,7 +96,6 @@ const HomePage: React.FC = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalHeader}>Add New Event</Text>
 
-            {/* Date */}
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
               <TextInput
                 style={styles.input}
@@ -121,7 +120,6 @@ const HomePage: React.FC = () => {
               />
             )}
 
-            {/* Time */}
             <TouchableOpacity onPress={() => setShowTimePicker(true)}>
               <TextInput
                 style={styles.input}
@@ -184,7 +182,6 @@ const HomePage: React.FC = () => {
   );
 };
 
-// ---- Styles ----
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   body: { flex: 1, padding: 16 },

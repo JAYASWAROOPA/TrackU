@@ -4,7 +4,6 @@ import { styles } from './Styles';
 import LinearGradient from 'react-native-linear-gradient';
 import { useState,useMemo } from 'react';
 import { AddIcon } from '../../assets/AddIcon';
-//  
 export default function CalendarPage() {
   const now = new Date();
   const [selectedDate, setSelectedDate] = useState(now);
@@ -17,7 +16,6 @@ export default function CalendarPage() {
     "July","August","September","October","November","December"
   ];
 
-  // Build calendar grid
   const weeks = useMemo(() => {
     
     const year = selectedDate.getFullYear();
@@ -84,7 +82,6 @@ export default function CalendarPage() {
   return (
     <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
 
-      {/* Month & Year navigation */}
       <View style={styles.header}>
         <TouchableOpacity onPress={goToPrevMonth}>
           <Text style={styles.navButton}>{"<"}</Text>
@@ -99,7 +96,6 @@ export default function CalendarPage() {
         </TouchableOpacity>
       </View>
 
-      {/* Calendar grid */}
       <View style={styles.calendar}>
         <View style={styles.weekHeaderRow}>
           {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => (
@@ -147,7 +143,6 @@ export default function CalendarPage() {
         ))}
       </View>
 
-      {/* Events List */}
       <View style={styles.eventsContainer}>
         <Text style={styles.eventsTitle}>
           Events on {selectedDate.getDate()}-{selectedDate.getMonth() + 1}-{selectedDate.getFullYear()}
@@ -155,12 +150,10 @@ export default function CalendarPage() {
         {renderEvents()}
       </View>
 
-      {/* Add Event Button */}
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <AddIcon/>
       </TouchableOpacity>
 
-      {/* Modal for adding event */}
       <Modal
         animationType="slide"
         transparent
