@@ -14,93 +14,109 @@ export default function HelpScreen() {
   return (
     <ScrollView style={styles.container}>
       {/* Back button */}
-     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-  <View style={styles.backContent}>
-    <Text style={styles.arrow}>⬅</Text>
-    <Text style={styles.backText}>Back</Text>
-  </View>
-</TouchableOpacity>
-
-
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+        <Text style={styles.arrow}>←</Text>
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
 
       <Text style={styles.title}>Help & Support – CampusTrack</Text>
 
-      <Text style={styles.text}>
-        Welcome to <Text style={styles.bold}>CampusTrack Help 🎓</Text>
-      </Text>
-      <Text style={styles.text}>
-        We’re here to make your college life simpler by helping you stay on top
-        of classes, deadlines, and tasks. If you ever face issues or have ideas,
-        we’d love to hear from you!
-      </Text>
+      {/* Intro Card */}
+      <View style={styles.card}>
+        <Text style={styles.text}>
+          Welcome to <Text style={styles.bold}>CampusTrack Help 🎓</Text>
+        </Text>
+        <Text style={styles.text}>
+          We’re here to make your college life simpler by helping you stay on top
+          of classes, deadlines, and tasks. If you ever face issues or have ideas,
+          we’d love to hear from you!
+        </Text>
+      </View>
 
-      <Text style={styles.subtitle}>🔧 Need Help?</Text>
-      <Text style={styles.text}>
-        • Report any issues so we can fix them quickly. {"\n"}
-        • Check your internet connection and ensure you’re using the latest
-        version of the app.
-      </Text>
+      {/* Need Help */}
+      <View style={styles.card}>
+        <Text style={styles.subtitle}>🔧 Need Help?</Text>
+        <Text style={styles.text}>
+          • Report any issues so we can fix them quickly. {"\n"}
+          • Check your internet connection and ensure you’re using the latest
+          version of the app.
+        </Text>
+      </View>
 
-      <Text style={styles.subtitle}>💡 Got Ideas?</Text>
-      <Text style={styles.text}>
-        • Have a feature in mind? {"\n"}• Want reminders, study tips, or
-        integrations? {"\n"}Share your thoughts with us!
-      </Text>
+      {/* Got Ideas */}
+      <View style={styles.card}>
+        <Text style={styles.subtitle}>💡 Got Ideas?</Text>
+        <Text style={styles.text}>
+          • Have a feature in mind? {"\n"}• Want reminders, study tips, or
+          integrations? {"\n"}Share your thoughts with us!
+        </Text>
+      </View>
 
-      <Text style={styles.subtitle}>❓ Common Questions</Text>
-      <Text style={styles.text}>
-        • <Text style={styles.bold}>How do I add a new class or task?</Text>
-        {"\n"}Tap the + button on your dashboard and fill in the details.
-      </Text>
-      <Text style={styles.text}>
-        • <Text style={styles.bold}>How do reminders work?</Text>
-        {"\n"}Set reminders for classes, assignments, or exams.
-      </Text>
-      <Text style={styles.text}>
-        • <Text style={styles.bold}>Can I sync with my calendar?</Text>
-        {"\n"}Yes, CampusTrack can sync with your device calendar.
-      </Text>
+      {/* Common Questions */}
+      <View style={styles.card}>
+        <Text style={styles.subtitle}>❓ Common Questions</Text>
+        <Text style={styles.text}>
+          • <Text style={styles.bold}>How do I add a new class or task?</Text>
+          {"\n"}Tap the + button on your dashboard and fill in the details.
+        </Text>
+        <Text style={styles.text}>
+          • <Text style={styles.bold}>How do reminders work?</Text>
+          {"\n"}Set reminders for classes, assignments, or exams.
+        </Text>
+        <Text style={styles.text}>
+          • <Text style={styles.bold}>Can I sync with my calendar?</Text>
+          {"\n"}Yes, CampusTrack can sync with your device calendar.
+        </Text>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
+  container: { flex: 1, padding: 16, backgroundColor: "#f9f9fc" },
+
   backBtn: {
-  paddingVertical: 10,
-  paddingHorizontal: 15,
-  backgroundColor: "#7350cc",
-  borderRadius: 8,
-  alignSelf: "flex-start",
-  margin: 10,
-},
-backContent: {
-  flexDirection: "row",
-  alignItems: "center",  // 🔹 ensures arrow and text are vertically aligned
-},
-arrow: {
-  fontSize: 16,
-  color: "#fff",
-  marginRight: 2, 
-  textAlign:"center",
-  top:-2
-   // space between arrow and text
-},
-backText: {
-  fontSize: 16,
-  fontWeight: "bold",
-  color: "#fff",
-},
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#7350cc",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  arrow: { fontSize: 16, color: "#fff", marginRight: 6 },
+  backText: { fontSize: 15, fontWeight: "600", color: "#fff" },
 
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 18,
+    color: "#222",
+    textAlign: "center",
+  },
 
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 14, color: "#111",marginTop:9 },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+
   subtitle: {
     fontSize: 16,
-    fontWeight: "600",
-    marginTop: 16,
-    marginBottom: 6,
-    color: "#333",
+    fontWeight: "700",
+    marginBottom: 8,
+    color: "#4a3ba3",
   },
-  text: { fontSize: 14, lineHeight: 20, marginBottom: 10, color: "#444" },
-  bold: { fontWeight: "bold" },
+  text: { fontSize: 14, lineHeight: 20, color: "#444", marginBottom: 6 },
+  bold: { fontWeight: "bold", color: "#222" },
 });

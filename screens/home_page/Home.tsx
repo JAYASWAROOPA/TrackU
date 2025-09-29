@@ -4,7 +4,7 @@ import { TopAppBar } from '../../components/topAppBar/TopAppBar';
 import { DayContainer } from '../../components/dayContainer/DayContainer';
 import { EventCard } from '../../components/eventCard/EventCard';
 
-const HomePage = () => {
+const HomePage = ({ username }: any) => {
   const today = new Date()
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const currentDate = today.getDate();
@@ -43,7 +43,7 @@ const HomePage = () => {
 
   return (
     <View style={styles.container}>
-      <TopAppBar name="Jayaswaroopa" />
+      <TopAppBar name={username} />
       <ScrollView style={styles.body}>
         <Text style={styles.header}>{formattedDate}</Text>
         <View style={styles.daysRow}>

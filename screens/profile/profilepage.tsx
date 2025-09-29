@@ -14,10 +14,8 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 // Icons
 import { NotificationIcon } from "../../assets/NotificationIcon";
-import { Privacy } from "../../assets/Privacy";
 import { Password } from "../../assets/Password";
 import { Theme } from "../../assets/Theme";
-import { Applan } from "../../assets/Applan";
 import { Help } from "../../assets/Help";
 import { Logout } from "../../assets/Logout";
 

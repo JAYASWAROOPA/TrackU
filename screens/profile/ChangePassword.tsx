@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+
 export default function ChangePassword() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,53 +27,53 @@ export default function ChangePassword() {
       return;
     }
     Alert.alert("Success", "Password changed successfully 🎉");
-    // 🔥 Later, connect with your backend here
   };
 
-  return ( 
+  return (
     <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
-        <View style={styles.new}>
+      <SafeAreaView style={styles.safeArea}>
+        {/* Back Button at Top */}
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <View style={styles.backContent}>
-            <Text style={styles.arrow}>⬅</Text>
-            <Text style={styles.backText}>Back</Text>
-          </View>
+          <Text style={styles.arrow}>⬅</Text>
+          <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
-              </View>
-      <View style={styles.card}>
-        <Text style={styles.title}>Change Password</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Current Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={currentPassword}
-          onChangeText={setCurrentPassword}
-        />
+        {/* Card Section */}
+        <View style={styles.card}>
+          <Text style={styles.title}>Change Password</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="New Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={newPassword}
-          onChangeText={setNewPassword}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Current Password"
+            placeholderTextColor="#ddd"
+            secureTextEntry
+            value={currentPassword}
+            onChangeText={setCurrentPassword}
+          />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm New Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="New Password"
+            placeholderTextColor="#ddd"
+            secureTextEntry
+            value={newPassword}
+            onChangeText={setNewPassword}
+          />
 
-        <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
-          <Text style={styles.buttonText}>Change Password</Text>
-        </TouchableOpacity>
-      </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm New Password"
+            placeholderTextColor="#ddd"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
+            <Text style={styles.buttonText}>Change Password</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 }
@@ -79,72 +81,67 @@ export default function ChangePassword() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    padding: 20,
+  },
+  safeArea: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  backBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    backgroundColor: "rgba(255,255,255,0.15)",
+    borderRadius: 10,
+    alignSelf: "flex-start",
+    marginBottom: 20,
+  },
+  arrow: {
+    fontSize: 18,
+    color: "#fff",
+    marginRight: 6,
+  },
+  backText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#fff",
   },
   card: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    flex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.46)",
     borderRadius: 20,
-    padding: 25,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8,
-    elevation: 6,
+    padding: 17,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "white",
-    marginBottom: 20,
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#fff",
+    marginBottom: 25,
     textAlign: "center",
+    letterSpacing: 0.5,
   },
-  new:{top:-140},
-  backBtn: {
-  paddingVertical: 10,
-  paddingHorizontal: 15,
-  backgroundColor: "#7350cc",
-  borderRadius: 8,
-  alignSelf: "flex-start",
-  margin: 10,
-},
-backContent: {
-  flexDirection: "row",
-  alignItems: "center",  // 🔹 ensures arrow and text are vertically aligned
-},
-arrow: {
-  fontSize: 16,
-  color: "#fff",
-  marginRight: 2, 
-  textAlign:"center",
-  top:-2
-   // space between arrow and text
-},
-backText: {
-  fontSize: 16,
-  fontWeight: "bold",
-  color: "#fff",
-},
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(255,255,255,0.3)",
+    backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: 12,
-    padding: 12,
-    marginBottom: 15,
+    padding: 14,
+    marginBottom: 18,
     fontSize: 16,
     color: "white",
   },
   button: {
     backgroundColor: "#7350cc",
-    paddingVertical: 15,
+    paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "bold",
     color: "white",
+    letterSpacing: 0.5,
   },
 });
