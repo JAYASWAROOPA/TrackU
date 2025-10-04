@@ -99,7 +99,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Stack.Navigator screenOptions={{ headerShown: false }}> 
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Sign" component={Login} />
         <Stack.Screen name="Login" component={Sign} />
         <Stack.Screen name="MainTabs" component={BottomTabs} />
