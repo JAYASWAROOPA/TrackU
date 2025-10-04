@@ -38,7 +38,6 @@ function ProfileStack() {
 // 👇 Bottom Tab Navigator
 function BottomTabs({ route }: any) {
   const { username } = route.params || {}; // optional params
-
   return (
     <Tab.Navigator
       initialRouteName="Home"

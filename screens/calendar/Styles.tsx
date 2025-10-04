@@ -101,11 +101,8 @@ export const styles = StyleSheet.create({
   borderRadius: 12, 
   justifyContent: 'center',
   alignItems: 'center',
-  elevation: 8,
-  shadowColor: '#000',
-  shadowOpacity: 0.2,
-  shadowRadius: 6,
-  shadowOffset: { width: 0, height: 3 },
+  elevation: 4,
+  backgroundColor:"#ffff"
 },
   modalContainer: {
     flex: 1,

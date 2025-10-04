@@ -4,7 +4,6 @@ import { styles } from './Styles';
 import LinearGradient from 'react-native-linear-gradient';
 import { useState,useMemo } from 'react';
 import { AddIcon } from '../../assets/AddIcon';
-//  
 export default function CalendarPage() {
   const now = new Date();
   const [selectedDate, setSelectedDate] = useState(now);
@@ -152,7 +151,6 @@ export default function CalendarPage() {
         </Text>
         {renderEvents()}
       </View>
-
 
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
         <AddIcon/>
