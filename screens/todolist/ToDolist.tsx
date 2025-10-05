@@ -4,32 +4,26 @@ import ToDoBox from '../../components/toDoBox/ToDoBox';
 import { styles } from './style';
 
 export default function ToDoList() {
-  // 🔹 Start with an empty list
   const [tasks, setTasks] = useState<{ id: number; text: string; done: boolean }[]>([]);
   const [taskText, setTaskText] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
 
-  // ✅ Add or Update Task
   const handleAddTask = () => {
     if (!taskText.trim()) return;
 
     if (editId) {
-      // Update task
       setTasks(tasks.map(t => (t.id === editId ? { ...t, text: taskText } : t)));
       setEditId(null);
     } else {
-      // Add new task
       setTasks([...tasks, { id: Date.now(), text: taskText, done: false }]);
     }
     setTaskText('');
   };
 
-  // ✅ Toggle Done
   const toggleTask = (id: number) => {
     setTasks(tasks.map(t => (t.id === id ? { ...t, done: !t.done } : t)));
   };
 
-  // ✅ Edit Task
   const editTask = (id: number, text: string) => {
     setTaskText(text);
     setEditId(id);
@@ -37,12 +31,10 @@ export default function ToDoList() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Plan Your Day</Text>
       </View>
 
-      {/* 🔹 Input Row */}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.input}
@@ -55,7 +47,6 @@ export default function ToDoList() {
         </TouchableOpacity>
       </View>
 
-      {/* Task List */}
       <View style={styles.list}>
         {tasks.length === 0 ? (
           <Text style={{ textAlign: 'center', color: '#999', marginTop: 20 }}>
@@ -73,9 +64,7 @@ export default function ToDoList() {
             />
           ))
         )}
-      </View>
-
-      
+      </View>      
     </View>
   );
 }

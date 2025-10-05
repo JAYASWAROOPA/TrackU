@@ -60,9 +60,7 @@ export default function Login({ navigation }:any) {
     <TouchableOpacity style={styles.button}  onPress={handleLogin}>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
-=</View>
-     
-=
+</View>
  </LinearGradient>
   );
 }
