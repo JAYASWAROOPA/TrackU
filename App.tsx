@@ -5,21 +5,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ChangePassword from './screens/profile/ChangePassword';
-import Profilepage from './screens/profile/profilepage';
-import HelpScreen from './screens/profile/HelpScreen';
+import ChangePassword from './Screens/profile/ChangePassword';
+import Profilepage from './Screens/profile/profilepage';
+import HelpScreen from './Screens/profile/HelpScreen';
 
-import HomePage from './screens/home_page/Home';
+import HomePage from './Screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
-import SetUp from './screens/setUpPage/SetUpPage';
+import SetUp from './Screens/setUpPage/SetUpPage';
 import { Add } from './assets/AddCircle';
-import ToDoList from './screens/todolist/ToDolist';
+import ToDoList from './Screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
-import CalendarPage from './screens/calendar/calendar_page';
+import CalendarPage from './Screens/calendar/calendar_page';
 import { Settings } from './assets/Settings';
-import Sign from './screens/loginPage/login';
-import Login from './screens/signUpPage/signin';
+import Sign from './Screens/loginPage/login';
+import Login from './Screens/signUpPage/signin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
