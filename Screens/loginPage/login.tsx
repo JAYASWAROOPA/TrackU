@@ -51,9 +51,7 @@ export default function Sign({ navigation }:any) {
     <TouchableOpacity style={styles.button} onPress={handleLogin} >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-=</View>
-     
-=
+</View>
  </LinearGradient>
   );
 }

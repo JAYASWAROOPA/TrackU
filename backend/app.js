@@ -32,7 +32,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const Event = require("./models/Events");
-
+const Todo = require("./models/Todo");
+require("./db");
 const app = express();
 app.use(cors()); // <--- allow requests from emulator / device
 app.use(bodyParser.json());
@@ -68,6 +69,43 @@ app.put("/events/:id", async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!updated) return res.status(404).json({ error: "Event not found" });
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
+// Get todos for a user
+app.get("/api/todos/:username", async (req, res) => {
+  try {
+    const todos = await Todo.find({ username: req.params.username });
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a new todo
+app.post("/api/todos/add", async (req, res) => {
+  try {
+    const todo = new Todo(req.body);
+    const saved = await todo.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Update a todo (task text or completion status)
+app.put("/api/todos/update/:id", async (req, res) => {
+  try {
+    const updated = await Todo.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ error: "Todo not found" });
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
