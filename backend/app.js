@@ -31,14 +31,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const Calendar = require('./models/Calendar');
+const Calendar = require("./models/Calendar");
 const Event = require("./models/Events");
+const Todo = require("./models/Todo");
+require("./db");
 
 const app = express();
-app.use(cors()); // <--- allow requests from emulator / device
+app.use(cors()); // Allow requests from emulator / device
 app.use(bodyParser.json());
 
-// POST (you already have this)
+// =====================
+// 🌟 EVENT ROUTES 🌟
+// =====================
+
+// POST — Add new event
 app.post("/events", async (req, res) => {
   try {
     const event = new Event(req.body);
@@ -49,7 +55,7 @@ app.post("/events", async (req, res) => {
   }
 });
 
-// GET events for a user (you already have this)
+// GET — Events for a specific user
 app.get("/events/:userId", async (req, res) => {
   try {
     const events = await Event.find({ userId: req.params.userId });
@@ -59,22 +65,20 @@ app.get("/events/:userId", async (req, res) => {
   }
 });
 
-// NEW: Update an event
+// PUT — Update an event
 app.put("/events/:id", async (req, res) => {
   try {
-    // req.body should contain { userId, eventName, description, date, time }
-    const updated = await Event.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const updated = await Event.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!updated) return res.status(404).json({ error: "Event not found" });
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-// Get events for a specific date
+
 // =====================
 // 🌟 CALENDAR ROUTES 🌟
 // =====================
@@ -85,7 +89,7 @@ app.post("/calendar", async (req, res) => {
     console.log("Received event:", req.body); // for debugging
     const calendarEntry = new Calendar({
       ...req.body,
-      date: new Date(req.body.date), // make sure it's stored as Date
+      date: new Date(req.body.date), // ensure it's stored as Date
     });
     const saved = await calendarEntry.save();
     console.log("Saved entry:", saved);
@@ -95,7 +99,6 @@ app.post("/calendar", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
 
 // GET — Calendar entries for a specific date
 app.get("/calendar/:userId/:date", async (req, res) => {
@@ -109,7 +112,7 @@ app.get("/calendar/:userId/:date", async (req, res) => {
 
     const events = await Calendar.find({
       userId,
-      date: { $gte: start, $lte: end }
+      date: { $gte: start, $lte: end },
     });
 
     res.json(events);
@@ -128,4 +131,47 @@ app.get("/calendar/:userId", async (req, res) => {
   }
 });
 
+// =====================
+// 🌟 TODO ROUTES 🌟
+// =====================
+
+// GET — Todos for a user
+app.get("/api/todos/:username", async (req, res) => {
+  try {
+    const todos = await Todo.find({ username: req.params.username });
+    res.json(todos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST — Add a new todo
+app.post("/api/todos/add", async (req, res) => {
+  try {
+    const todo = new Todo(req.body);
+    const saved = await todo.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// PUT — Update a todo (task text or completion status)
+app.put("/api/todos/update/:id", async (req, res) => {
+  try {
+    const updated = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updated) return res.status(404).json({ error: "Todo not found" });
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// =====================
+// 🌟 SERVER START 🌟
+// =====================
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+
