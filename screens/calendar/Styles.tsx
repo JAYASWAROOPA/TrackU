@@ -5,6 +5,26 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+successBanner: {
+  position: 'absolute',
+  top: 50,
+  alignSelf: 'center',
+  backgroundColor: '#4caf50', // green success color
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  borderRadius: 8,
+  zIndex: 9999,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 3,
+  elevation: 5,
+},
+successText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  fontSize: 16,
+},
 
   header: {
     flexDirection: 'row',
@@ -131,6 +151,7 @@ export const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 16,
     fontSize: 16,
+    width:230,
   },
   modalButton: {
     padding: 14,

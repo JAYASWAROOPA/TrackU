@@ -15,5 +15,3 @@ export const Privacy=(props:any) =>{
     </Svg>
   )
 }
-
-

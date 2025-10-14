@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("./db"); // Database connection
 
+const Calendar = require("./models/Calendar");
 const Event = require("./models/Events");
 const Todo = require("./models/Todo");
 const User = require("./models/User");
@@ -86,6 +87,56 @@ app.put("/api/todos/update/:id", async (req, res) => {
   }
 });
 
+/* -------------------------- CALENDAR ROUTES -------------------------- */
+
+// POST — Add calendar entry
+app.post("/calendar", async (req, res) => {
+  try {
+    console.log("Received event:", req.body);
+    const calendarEntry = new Calendar({
+      ...req.body,
+      date: new Date(req.body.date),
+    });
+    const saved = await calendarEntry.save();
+    console.log("Saved entry:", saved);
+    res.status(201).json(saved);
+  } catch (err) {
+    console.log("Error:", err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET — Calendar entries for a specific date
+app.get("/calendar/:userId/:date", async (req, res) => {
+  try {
+    const { userId, date } = req.params;
+
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+
+    const events = await Calendar.find({
+      userId,
+      date: { $gte: start, $lte: end },
+    });
+
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET — All calendar entries for a user
+app.get("/calendar/:userId", async (req, res) => {
+  try {
+    const entries = await Calendar.find({ userId: req.params.userId });
+    res.json(entries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 /* -------------------------- USER ROUTES -------------------------- */
 
 // POST - Create new user
@@ -162,5 +213,4 @@ app.post("/login", async (req, res) => {
 
 /* -------------------------- SERVER -------------------------- */
 
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(5000, () => console.log("🚀 Server running on port 5000"));
