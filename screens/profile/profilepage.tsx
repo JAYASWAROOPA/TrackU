@@ -19,7 +19,7 @@ import { Theme } from "../../assets/Theme";
 import { Help } from "../../assets/Help";
 import { Logout } from "../../assets/Logout";
 
-export default function Profilepage() {
+const Profilepage=({ username }: { username: string })=> {
   type ProfileStackParamList = {
     Profilepage: undefined;
     HelpScreen: undefined;
@@ -57,7 +57,7 @@ export default function Profilepage() {
           source={{ uri: "https://via.placeholder.com/100" }}
           style={styles.avatar}
         />
-        <Text style={styles.username}>NAME</Text>
+        <Text style={styles.username}>{username}</Text>
       </View>
 
       {/* Menu List */}
@@ -201,3 +201,4 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
+export default Profilepage;

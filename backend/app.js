@@ -187,6 +187,31 @@ app.put("/users/:username", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+app.put('/users/change-password', async (req, res) => {
+  const { username, currentPassword, newPassword } = req.body;
+
+  console.log("Received:", { username, currentPassword, newPassword });
+
+  const user = await User.findOne({ username });
+  if (!user) {
+    console.log("User not found:", username);
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  console.log("Stored password:", user.password);
+
+  if (user.password !== currentPassword) {
+    console.log("Password mismatch:", currentPassword, "!==", user.password);
+    return res.status(400).json({ message: "Incorrect current password" });
+  }
+
+  user.password = newPassword;
+  await user.save();
+  console.log("Password updated for user:", username);
+
+  res.json({ message: "Password updated successfully" });
+});
+
 
 // POST - User Login
 app.post("/login", async (req, res) => {
