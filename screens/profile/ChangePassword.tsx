@@ -22,44 +22,43 @@ export default function ChangePassword({ username }: { username: string }) {
       ? 'http://10.0.2.2:5000'
       : 'http://localhost:5000';
   const handleChangePassword = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert('Error', 'Please fill all fields');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      Alert.alert('Error', 'New passwords do not match');
-      return;
-    }
-    try {
-      const res = await fetch(`${API_BASE}/users/change-password`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          currentPassword,
-          newPassword,
-        }),
-      });
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    Alert.alert('Error', 'Please fill all fields');
+    return;
+  }
+  if (newPassword !== confirmPassword) {
+    Alert.alert('Error', 'New passwords do not match');
+    return;
+  }
 
-      // ✅ Prevent crash if response is not JSON
-      let data;
-      try {
-        data = await res.json();
-      } catch {
-        data = {};
-      }
+  try {
+    console.log("🔄 Sending request to:", `${API_BASE}/change_password`);
+    console.log("Body:", { username, currentPassword, newPassword });
 
-      if (!res.ok) {
-        throw new Error(data.message || 'Failed to change password');
-      }
+    const res = await fetch(`${API_BASE}/change_password`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username,
+        currentPassword,
+        newPassword,
+      }),
+    });
 
-      Alert.alert('Success', 'Password changed successfully 🎉');
-      navigation.goBack();
-    } catch (err: any) {
-      console.error('Error changing password:', err);
-      Alert.alert('Error', err.message || 'Something went wrong');
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to change password');
     }
-  };
+
+    Alert.alert('Success', 'Password changed successfully 🎉');
+    navigation.goBack();
+  } catch (err) {
+    console.error('❌ Error changing password:', err);
+    Alert.alert('Error', err.message || 'Something went wrong');
+  }
+};
+
   console.log('Sending PUT request to:', `${API_BASE}/users/change-password`);
   console.log('Body:', { username, currentPassword, newPassword });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,19 @@ import {
   FlatList,
   StyleSheet,
   Switch,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 // Icons
-import { NotificationIcon } from "../../assets/NotificationIcon";
-import { Password } from "../../assets/Password";
-import { Theme } from "../../assets/Theme";
-import { Help } from "../../assets/Help";
-import { Logout } from "../../assets/Logout";
+import { NotificationIcon } from '../../assets/NotificationIcon';
+import { Password } from '../../assets/Password';
+import { Theme } from '../../assets/Theme';
+import { Help } from '../../assets/Help';
+import { Logout } from '../../assets/Logout';
 
-const Profilepage=({ username }: { username: string })=> {
+const Profilepage = ({ username }: { username: string }) => {
   type ProfileStackParamList = {
     Profilepage: undefined;
     HelpScreen: undefined;
@@ -27,25 +27,40 @@ const Profilepage=({ username }: { username: string })=> {
   };
 
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previous) => !previous);
+  const toggleSwitch = () => setIsEnabled(previous => !previous);
 
   type ProfileNavigationProp = NativeStackNavigationProp<
     ProfileStackParamList,
-    "Profilepage"
+    'Profilepage'
   >;
 
   const navigation = useNavigation<ProfileNavigationProp>();
   const [isThemeEnabled, setIsThemeEnabled] = useState(false);
   const menuItems = [
-    { id: "1", title: "Notification", icon: <NotificationIcon />, type: "switch" },
-    { id: "3", title: "Change password", icon: <Password />, type: "navigate-change" },
-    { id: "4", title: "Theme and colour", icon: <Theme />,type:"switch-theme" },
-    { id: "6", title: "Help", icon: <Help />, type: "navigate-help" },
-    { id: "7", title: "Log out", icon: <Logout /> },
+    {
+      id: '1',
+      title: 'Notification',
+      icon: <NotificationIcon />,
+      type: 'switch',
+    },
+    {
+      id: '3',
+      title: 'Change password',
+      icon: <Password />,
+      type: 'navigate-change',
+    },
+    {
+      id: '4',
+      title: 'Theme and colour',
+      icon: <Theme />,
+      type: 'switch-theme',
+    },
+    { id: '6', title: 'Help', icon: <Help />, type: 'navigate-help' },
+    { id: '7', title: 'Log out', icon: <Logout /> },
   ];
 
   return (
-    <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
+    <LinearGradient colors={['#4c1d95', '#ec4899']} style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Profile</Text>
@@ -54,7 +69,7 @@ const Profilepage=({ username }: { username: string })=> {
       {/* Profile Info */}
       <View style={styles.profileSection}>
         <Image
-          source={{ uri: "https://via.placeholder.com/100" }}
+          source={{ uri: 'https://via.placeholder.com/100' }}
           style={styles.avatar}
         />
         <Text style={styles.username}>{username}</Text>
@@ -64,9 +79,9 @@ const Profilepage=({ username }: { username: string })=> {
       <View style={styles.menuContainer}>
         <FlatList
           data={menuItems}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={({ item }) => {
-            if (item.type === "switch") {
+            if (item.type === 'switch') {
               return (
                 <View style={styles.menuItem}>
                   <View style={styles.menuLeft}>
@@ -74,8 +89,8 @@ const Profilepage=({ username }: { username: string })=> {
                     <Text style={styles.menuText}>{item.title}</Text>
                   </View>
                   <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#7350cc" : "#f4f3f4"}
+                    trackColor={{ false: '#767577', true: '#81b0ff' }}
+                    thumbColor={isEnabled ? '#7350cc' : '#f4f3f4'}
                     onValueChange={toggleSwitch}
                     value={isEnabled}
                     style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
@@ -83,7 +98,8 @@ const Profilepage=({ username }: { username: string })=> {
                 </View>
               );
             }
-            if (item.type === "switch-theme") {
+
+            if (item.type === 'switch-theme') {
               return (
                 <View style={styles.menuItem}>
                   <View style={styles.menuLeft}>
@@ -91,8 +107,8 @@ const Profilepage=({ username }: { username: string })=> {
                     <Text style={styles.menuText}>{item.title}</Text>
                   </View>
                   <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isThemeEnabled ? "#7350cc" : "#f4f3f4"}
+                    trackColor={{ false: '#767577', true: '#81b0ff' }}
+                    thumbColor={isThemeEnabled ? '#7350cc' : '#f4f3f4'}
                     onValueChange={() => setIsThemeEnabled(prev => !prev)}
                     value={isThemeEnabled}
                     style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
@@ -100,12 +116,13 @@ const Profilepage=({ username }: { username: string })=> {
                 </View>
               );
             }
-            if (item.type === "navigate-help") {
+
+            if (item.type === 'navigate-help') {
               return (
                 <TouchableOpacity
                   style={styles.menuItem}
                   activeOpacity={0.6}
-                  onPress={() => navigation.navigate("HelpScreen")}
+                  onPress={() => navigation.navigate('HelpScreen')}
                 >
                   <View style={styles.menuLeft}>
                     {item.icon}
@@ -115,16 +132,40 @@ const Profilepage=({ username }: { username: string })=> {
               );
             }
 
-            if (item.type === "navigate-change") {
+            if (item.type === 'navigate-change') {
               return (
                 <TouchableOpacity
                   style={styles.menuItem}
                   activeOpacity={0.6}
-                  onPress={() => navigation.navigate("ChangePassword")}
+                  onPress={() => navigation.navigate('ChangePassword')}
                 >
                   <View style={styles.menuLeft}>
                     {item.icon}
                     <Text style={styles.menuText}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }
+
+            // ✅ Log out button route to Login
+            if (item.title === 'Log out') {
+              return (
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  activeOpacity={0.6}
+                  onPress={() => {
+                    // Optional: Clear async storage or any auth tokens here
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: 'Login' }],
+                    });
+                  }}
+                >
+                  <View style={styles.menuLeft}>
+                    {item.icon}
+                    <Text style={[styles.menuText, { color: 'red' }]}>
+                      {item.title}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -143,7 +184,7 @@ const Profilepage=({ username }: { username: string })=> {
       </View>
     </LinearGradient>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -153,12 +194,12 @@ const styles = StyleSheet.create({
     padding: 19,
   },
   headerText: {
-    color: "white",
+    color: 'white',
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   profileSection: {
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 20,
     marginBottom: 30,
   },
@@ -166,39 +207,39 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: "#ddd",
+    backgroundColor: '#ddd',
     marginBottom: 10,
   },
   username: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   menuContainer: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,0.3)",
+    backgroundColor: 'rgba(255,255,255,0.3)',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 15,
-    marginTop:30,
+    marginTop: 30,
   },
   menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 15,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     borderBottomWidth: 0.5,
-    borderBottomColor: "rgba(0,0,0,0.1)",
+    borderBottomColor: 'rgba(0,0,0,0.1)',
   },
   menuLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   menuText: {
     fontSize: 19,
     marginLeft: 12,
-    color: "black",
-    fontWeight: "500",
+    color: 'black',
+    fontWeight: '500',
   },
 });
 export default Profilepage;
