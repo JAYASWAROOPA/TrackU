@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,33 +7,69 @@ import {
   StyleSheet,
   Alert,
   SafeAreaView,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
+  Platform,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ChangePassword() {
+export default function ChangePassword({ username }: { username: string }) {
   const navigation = useNavigation();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const API_BASE =
+    Platform.OS === 'android'
+      ? 'http://10.0.2.2:5000'
+      : 'http://localhost:5000';
+  const handleChangePassword = async () => {
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    Alert.alert('Error', 'Please fill all fields');
+    return;
+  }
+  if (newPassword !== confirmPassword) {
+    Alert.alert('Error', 'New passwords do not match');
+    return;
+  }
 
-  const handleChangePassword = () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert("Error", "Please fill all fields");
-      return;
+  try {
+    console.log("🔄 Sending request to:", `${API_BASE}/change_password`);
+    console.log("Body:", { username, currentPassword, newPassword });
+
+    const res = await fetch(`${API_BASE}/change_password`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username,
+        currentPassword,
+        newPassword,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Failed to change password');
     }
-    if (newPassword !== confirmPassword) {
-      Alert.alert("Error", "New passwords do not match");
-      return;
-    }
-    Alert.alert("Success", "Password changed successfully 🎉");
-  };
+
+    Alert.alert('Success', 'Password changed successfully 🎉');
+    navigation.goBack();
+  } catch (err) {
+    console.error('❌ Error changing password:', err);
+    Alert.alert('Error', err.message || 'Something went wrong');
+  }
+};
+
+  console.log('Sending PUT request to:', `${API_BASE}/users/change-password`);
+  console.log('Body:', { username, currentPassword, newPassword });
 
   return (
-    <LinearGradient colors={["#4c1d95", "#ec4899"]} style={styles.container}>
+    <LinearGradient colors={['#4c1d95', '#ec4899']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* Back Button at Top */}
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backBtn}
+        >
           <Text style={styles.arrow}>⬅</Text>
           <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
@@ -69,7 +105,10 @@ export default function ChangePassword() {
             onChangeText={setConfirmPassword}
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleChangePassword}
+          >
             <Text style={styles.buttonText}>Change Password</Text>
           </TouchableOpacity>
         </View>
@@ -88,60 +127,60 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   backBtn: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 8,
     paddingHorizontal: 15,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: 10,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginBottom: 20,
   },
   arrow: {
     fontSize: 18,
-    color: "#fff",
+    color: '#fff',
     marginRight: 6,
   },
   backText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
+    fontWeight: '600',
+    color: '#fff',
   },
   card: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.46)",
+    backgroundColor: 'rgba(255, 255, 255, 0.46)',
     borderRadius: 20,
     padding: 17,
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
-    color: "#fff",
+    fontWeight: '700',
+    color: '#fff',
     marginBottom: 25,
-    textAlign: "center",
+    textAlign: 'center',
     letterSpacing: 0.5,
   },
   input: {
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
-    backgroundColor: "rgba(255,255,255,0.2)",
+    borderColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 12,
     padding: 14,
     marginBottom: 18,
     fontSize: 16,
-    color: "white",
+    color: 'white',
   },
   button: {
-    backgroundColor: "#7350cc",
+    backgroundColor: '#7350cc',
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 15,
   },
   buttonText: {
     fontSize: 17,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     letterSpacing: 0.5,
   },
 });

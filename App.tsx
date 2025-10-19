@@ -5,32 +5,36 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ChangePassword from './Screens/profile/ChangePassword';
-import Profilepage from './Screens/profile/profilepage';
-import HelpScreen from './Screens/profile/HelpScreen';
+import ChangePassword from './screens/profile/ChangePassword';
+import Profilepage from './screens/profile/profilepage';
+import HelpScreen from './screens/profile/HelpScreen';
 
-import HomePage from './Screens/home_page/Home';
+import HomePage from './screens/home_page/Home';
 import { HomeIcon } from './assets/HomeIcon';
-import SetUp from './Screens/setUpPage/SetUpPage';
+import SetUp from './screens/setUpPage/SetUpPage';
 import { Add } from './assets/AddCircle';
-import ToDoList from './Screens/todolist/ToDolist';
+import ToDoList from './screens/todolist/ToDolist';
 import { ToDo } from './assets/ToDo';
 import { Calender } from './assets/Calender';
-import CalendarPage from './Screens/calendar/calendar_page';
+import CalendarPage from './screens/calendar/calendar_page';
 import { Settings } from './assets/Settings';
-import Sign from './Screens/loginPage/login';
-import Login from './Screens/signUpPage/signin';
+import Sign from './screens/loginPage/login';
+import Login from './screens/signUpPage/signin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 // 👇 Profile stack including HelpScreen
-function ProfileStack() {
+function ProfileStack({ username }: { username: string }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Profilepage" component={Profilepage} />
+      <Stack.Screen name="Profilepage">
+        {() => <Profilepage username={username} />}
+      </Stack.Screen>
       <Stack.Screen name="HelpScreen" component={HelpScreen} />
-      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="ChangePassword">
+        {() => <ChangePassword username={username} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }
@@ -74,7 +78,6 @@ function BottomTabs({ route }: any) {
 
       <Tab.Screen
         name="SetUp"
-        component={SetUp}
         options={{
           tabBarIcon: ({ focused }) => (
             <Add
@@ -84,11 +87,12 @@ function BottomTabs({ route }: any) {
             />
           ),
         }}
-      />
+      >
+        {() => <SetUp username={username} />}
+      </Tab.Screen>
 
       <Tab.Screen
         name="TodoList"
-        component={ToDoList}
         options={{
           tabBarIcon: ({ focused }) => (
             <ToDo
@@ -98,11 +102,11 @@ function BottomTabs({ route }: any) {
             />
           ),
         }}
-      />
-
+      >
+        {() => <ToDoList username={username} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Calender"
-        component={CalendarPage}
         options={{
           tabBarIcon: ({ focused }) => (
             <Calender
@@ -112,12 +116,13 @@ function BottomTabs({ route }: any) {
             />
           ),
         }}
-      />
+      >
+        {() => <CalendarPage username={username} />}
+      </Tab.Screen>
 
       {/* 👇 Profile uses nested stack */}
       <Tab.Screen
         name="Profile"
-        component={ProfileStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <Settings
@@ -127,7 +132,9 @@ function BottomTabs({ route }: any) {
             />
           ),
         }}
-      />
+      >
+        {() => <ProfileStack username={username} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

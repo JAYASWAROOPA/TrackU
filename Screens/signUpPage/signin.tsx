@@ -53,7 +53,7 @@
 //           }}
 //     />
 //     {error ? (
-//           <Text style={{ color: 'yellow', top:250,textAlign: 'center',  
+//           <Text style={{ color: 'yellow', top:250,textAlign: 'center',
 //       fontWeight: 'bold' }}>{error}</Text>
 //         ) : null}
 //    <TouchableOpacity onPress={() => navigation.replace('Login')}>
@@ -66,7 +66,14 @@
 //  </LinearGradient>
 //   );
 // }
-import { Text, View, TextInput, TouchableOpacity, GestureResponderEvent, Platform } from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  GestureResponderEvent,
+  Platform,
+} from 'react-native';
 import React, { useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { styles } from './styles';
@@ -78,7 +85,9 @@ export default function SignIn({ navigation }: any) {
 
   // Base URL of backend (you already specified this)
   const BASE_URL =
-    Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
+    Platform.OS === 'android'
+      ? 'http://10.0.2.2:5000'
+      : 'http://localhost:5000';
 
   const handleLogin = async (_e?: GestureResponderEvent) => {
     if (!username.trim() || !password.trim()) {
@@ -130,7 +139,7 @@ export default function SignIn({ navigation }: any) {
           placeholder="Enter username"
           placeholderTextColor="#979393ff"
           value={username}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setUsername(text);
             if (error) setError('');
           }}
@@ -143,7 +152,7 @@ export default function SignIn({ navigation }: any) {
           placeholderTextColor="#979393ff"
           secureTextEntry
           value={password}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setPassword(text);
             if (error) setError('');
           }}
@@ -156,13 +165,14 @@ export default function SignIn({ navigation }: any) {
               top: 250,
               textAlign: 'center',
               fontWeight: 'bold',
-            }}>
+            }}
+          >
             {error}
           </Text>
         ) : null}
 
         <TouchableOpacity onPress={() => navigation.replace('Login')}>
-          <Text style={styles.linkText}>Already had account ?</Text>
+          <Text style={styles.linkText}>Already have an account ?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>

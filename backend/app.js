@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require("./db"); // Database connection
-
+require("./db");
 const Calendar = require("./models/Calendar");
 const Event = require("./models/Events");
 const Todo = require("./models/Todo");
@@ -187,7 +186,53 @@ app.put("/users/:username", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+app.put('/change_password', async (req, res) => {
+  try {
+    const { username, currentPassword, newPassword } = req.body;
 
+    console.log("📩 Password change request received:", { username, currentPassword, newPassword });
+
+    // 1️⃣ Validate input
+    if (!username || !currentPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // 2️⃣ Find user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      console.log("❌ User not found:", username);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 3️⃣ Check current password
+    if (user.password !== currentPassword) {
+      console.log("❌ Incorrect current password");
+      return res.status(400).json({ message: "Incorrect current password" });
+    }
+
+    // 4️⃣ Update to new password
+    user.password = newPassword;
+    await user.save();
+
+    console.log("✅ Password updated successfully for user:", username);
+    res.status(200).json({ message: "Password updated successfully" });
+
+  } catch (error) {
+    console.error("🔥 Error updating password:", error);
+    res.status(500).json({ message: "Failed to update password", error: error.message });
+  }
+});
+app.delete('/events/:id', async (req, res) => {
+  try {
+    const deleted = await Event.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 // POST - User Login
 app.post("/login", async (req, res) => {
   try {
