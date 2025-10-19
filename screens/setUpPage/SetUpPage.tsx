@@ -8,11 +8,15 @@ import {
   TouchableOpacity,
   Modal,
   Platform,
+  Alert,
 } from 'react-native';
 import axios from 'axios';
 import { EventCard } from '../../components/eventCard/EventCard';
 import { AddIcon } from '../../assets/AddIcon';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
 
 type NewEvent = {
   date: string;
@@ -25,12 +29,15 @@ type EventItem = NewEvent & { bgColor: string; _id: string };
 
 const SetUPpage = ({ username, userId: propUserId }: any) => {
   const BASE_URL =
-    Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
+    Platform.OS === 'android'
+      ? 'http://10.0.2.2:5000'
+      : 'http://localhost:5000';
   const USER_ID = propUserId ?? username ?? 'demo-user';
 
   const [events, setEvents] = useState<EventItem[]>([]);
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [reminderBefore, setReminderBefore] = useState('10');
   const [newEvent, setNewEvent] = useState<NewEvent>({
     date: '',
     taskTime: '',
@@ -39,11 +46,36 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
   });
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const colors: string[] = ['#f3fbe9', '#e9f1fb', '#fbe9f1', '#fff3e0', '#ede7f6'];
+  const colors: string[] = [
+    '#f3fbe9',
+    '#e9f1fb',
+    '#fbe9f1',
+    '#fff3e0',
+    '#ede7f6',
+  ];
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-
+  const handleDeleteEvent = async (id: string) => {
+    if (!id) return;
+    Alert.alert('Delete Event', 'Are you sure you want to delete this event?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const res = await axios.delete(`${BASE_URL}/events/${id}`);
+            setEvents(prev => prev.filter(ev => ev._id !== id));
+            Alert.alert('Success', 'Event deleted successfully');
+          } catch (err) {
+            console.log('Delete error:', err);
+            Alert.alert('Error deleting event');
+          }
+        },
+      },
+    ]);
+  };
   // FETCH EVENTS FROM BACKEND
   const fetchEvents = async () => {
     try {
@@ -81,7 +113,10 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
     try {
       if (editingIndex !== null) {
         const eventToEdit = events[editingIndex];
-        const res = await axios.put(`${BASE_URL}/events/${eventToEdit._id}`, payload);
+        const res = await axios.put(
+          `${BASE_URL}/events/${eventToEdit._id}`,
+          payload,
+        );
         const updated = [...events];
         updated[editingIndex] = {
           ...updated[editingIndex],
@@ -131,7 +166,9 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
           <Text style={styles.subHeader}>All events</Text>
           {events.length > 0 ? (
             events
-              .filter(event => event.title.toLowerCase().includes(searchText.toLowerCase()))
+              .filter(event =>
+                event.title.toLowerCase().includes(searchText.toLowerCase()),
+              )
               .map((event, index) => (
                 <EventCard
                   key={event._id}
@@ -154,12 +191,17 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
               ))
           ) : (
             <View style={{ marginTop: 40, alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, color: '#999' }}>No events found</Text>
+              <Text style={{ fontSize: 16, color: '#999' }}>
+                No events found
+              </Text>
             </View>
           )}
         </ScrollView>
 
-        <TouchableOpacity style={styles.add} onPress={() => setModalVisible(true)}>
+        <TouchableOpacity
+          style={styles.add}
+          onPress={() => setModalVisible(true)}
+        >
           <AddIcon />
         </TouchableOpacity>
       </View>
@@ -173,7 +215,9 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalHeader}>{editingIndex !== null ? 'Edit Event' : 'Add New Event'}</Text>
+            <Text style={styles.modalHeader}>
+              {editingIndex !== null ? 'Edit Event' : 'Add New Event'}
+            </Text>
 
             {/* Date Picker */}
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
@@ -186,7 +230,11 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
-                value={newEvent.date ? new Date(newEvent.date.split('/').reverse().join('-')) : new Date()}
+                value={
+                  newEvent.date
+                    ? new Date(newEvent.date.split('/').reverse().join('-'))
+                    : new Date()
+                }
                 mode="date"
                 display="default"
                 onChange={(e: DateTimePickerEvent, selectedDate?: Date) => {
@@ -212,7 +260,11 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
             </TouchableOpacity>
             {showTimePicker && (
               <DateTimePicker
-                value={newEvent.taskTime ? new Date(`1970-01-01T${newEvent.taskTime}:00`) : new Date()}
+                value={
+                  newEvent.taskTime
+                    ? new Date(`1970-01-01T${newEvent.taskTime}:00`)
+                    : new Date()
+                }
                 mode="time"
                 display="default"
                 onChange={(e: DateTimePickerEvent, selectedTime?: Date) => {
@@ -220,7 +272,10 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
                   if (selectedTime) {
                     setNewEvent(prev => ({
                       ...prev,
-                      taskTime: selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                      taskTime: selectedTime.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      }),
                     }));
                   }
                 }}
@@ -231,24 +286,67 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
               style={styles.input}
               placeholder="Event Title"
               value={newEvent.title}
-              onChangeText={text => setNewEvent(prev => ({ ...prev, title: text }))}
+              onChangeText={text =>
+                setNewEvent(prev => ({ ...prev, title: text }))
+              }
             />
             <TextInput
               style={[styles.input, { height: 80 }]}
               placeholder="Description"
               multiline
               value={newEvent.description}
-              onChangeText={text => setNewEvent(prev => ({ ...prev, description: text }))}
+              onChangeText={text =>
+                setNewEvent(prev => ({ ...prev, description: text }))
+              }
             />
 
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#400AD6' }]} onPress={handleSaveEvent}>
-                <Text style={styles.buttonText}>{editingIndex !== null ? 'Update' : 'Add'}</Text>
-              </TouchableOpacity>
+            {/* Reminder Picker */}
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 6,
+                marginBottom: 10,
+              }}
+            >
+              <Picker
+                selectedValue={reminderBefore}
+                onValueChange={value => setReminderBefore(value)}
+              >
+                <Picker.Item label="10 minutes" value="10" />
+                <Picker.Item label="30 minutes" value="30" />
+                <Picker.Item label="1 hour" value="60" />
+                <Picker.Item label="3 hours" value="180" />
+                <Picker.Item label="1 day" value="1440" />
+              </Picker>
+            </View>
 
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#999' }]} onPress={() => setModalVisible(false)}>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#999' }]}
+                onPress={() => setModalVisible(false)}
+              >
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#400AD6' }]}
+                onPress={handleSaveEvent}
+              >
+                <Text style={styles.buttonText}>
+                  {editingIndex !== null ? 'Update' : 'Add'}
+                </Text>
+              </TouchableOpacity>
+
+              {editingIndex !== null && (
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: '#ff4d4d' }]}
+                  onPress={() => handleDeleteEvent(events[editingIndex]._id)}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -260,17 +358,84 @@ const SetUPpage = ({ username, userId: propUserId }: any) => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   body: { flex: 1, padding: 16 },
-  subHeader: { fontSize: 22, marginBottom: 10, fontWeight: '500', color: '#666667' },
-  searchBar: { height: 45, borderRadius: 8, paddingHorizontal: 12, margin: 16, fontSize: 16, backgroundColor: '#f9f9f9' },
+  subHeader: {
+    fontSize: 22,
+    marginBottom: 10,
+    fontWeight: '500',
+    color: '#666667',
+  },
+  searchBar: {
+    height: 45,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    margin: 16,
+    fontSize: 16,
+    backgroundColor: '#f9f9f9',
+  },
   searchContainer: { height: 110, backgroundColor: '#400AD6' },
-  additionalContainer: { backgroundColor: '#f9f9f9', flex: 1, position: 'relative', borderTopLeftRadius: 30, borderTopRightRadius: 30, top: -28, overflow: 'hidden' },
-  add: { padding: 20, width: 50, height: 50, backgroundColor: '#fefefeff', justifyContent: 'center', alignItems: 'center', borderRadius: 8, right: 25, bottom: 50, elevation: 5, position: 'absolute' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center' },
-  modalContainer: { width: '90%', backgroundColor: '#fff', borderRadius: 15, padding: 20, elevation: 10 },
-  modalHeader: { fontSize: 20, fontWeight: '600', marginBottom: 15, textAlign: 'center', color: '#400AD6' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, fontSize: 16, marginBottom: 12 },
-  modalButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
-  button: { flex: 1, marginHorizontal: 5, paddingVertical: 12, borderRadius: 8, alignItems: 'center' },
+  additionalContainer: {
+    backgroundColor: '#f9f9f9',
+    flex: 1,
+    position: 'relative',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    top: -28,
+    overflow: 'hidden',
+  },
+  add: {
+    padding: 20,
+    width: 50,
+    height: 50,
+    backgroundColor: '#fefefeff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    right: 25,
+    bottom: 50,
+    elevation: 5,
+    position: 'absolute',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 20,
+    elevation: 10,
+  },
+  modalHeader: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 15,
+    textAlign: 'center',
+    color: '#400AD6',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '500' },
 });
 

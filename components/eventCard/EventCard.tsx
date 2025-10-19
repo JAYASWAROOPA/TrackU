@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { styles } from './Styles';
-import { TEventCard } from './Types';
+import { TEventCard } from './types';
 export const EventCard: React.FC<TEventCard> = ({
   timeRemaining,
   taskTime,

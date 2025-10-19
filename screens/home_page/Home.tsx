@@ -17,6 +17,8 @@ import { EventCard } from '../../components/eventCard/EventCard';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import NotificationService from '../../NotificationService';
+import { Picker } from '@react-native-picker/picker';
 
 interface EventItem {
   _id?: string;
@@ -30,6 +32,14 @@ interface EventItem {
 }
 
 const HomePage = ({ username, userId: propUserId }: any) => {
+  // Notifications.registerRemoteNotifications();
+  // Notifications.events().registerNotificationReceivedForeground(
+  //   (notification, completion) => {
+  //     console.log('Notification received in foreground:', notification);
+  //     completion({ alert: true, sound: true, badge: false });
+  //   },
+  // );
+
   const API_BASE =
     Platform.OS === 'android'
       ? 'http://10.0.2.2:5000'
@@ -49,6 +59,7 @@ const HomePage = ({ username, userId: propUserId }: any) => {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [reminderBefore, setReminderBefore] = useState('10'); // default 10 minutes
   const [editedEvent, setEditedEvent] = useState<Partial<EventItem>>({});
   const [loading, setLoading] = useState(false);
 
@@ -82,11 +93,11 @@ const HomePage = ({ username, userId: propUserId }: any) => {
     const [year, month, day] = dateISO.split('T')[0].split('-');
     return `${day}/${month}/${year}`;
   };
-
   const computeTimeRemaining = (dateISO: string, timeStr: string) => {
     if (!dateISO || !timeStr) return '';
     const eventDate = new Date(dateISO);
-    const [hh = '0', mm = '0'] = (timeStr || '').split(':');
+    let [hh = '0', mm = '0'] = (timeStr || '').split(':');
+    mm = mm.split(' ')[0];
     eventDate.setHours(Number(hh), Number(mm), 0, 0);
     const diff = eventDate.getTime() - new Date().getTime();
     if (diff <= 0) return 'Ended';
@@ -95,6 +106,44 @@ const HomePage = ({ username, userId: propUserId }: any) => {
     const hrs = Math.floor(mins / 60);
     return `${hrs} hr${hrs > 1 ? 's' : ''} left ⏳`;
   };
+  // DELETE EVENT
+const handleDeleteEvent = async (id?: string) => {
+  if (!id) {
+    Alert.alert('Error', 'No event ID found');
+    return;
+  }
+
+  Alert.alert('Delete Event', 'Are you sure you want to delete this event?', [
+    { text: 'Cancel', style: 'cancel' },
+    {
+      text: 'Delete',
+      style: 'destructive',
+      onPress: async () => {
+        try {
+          const response = await fetch(`${API_BASE}/events/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+          });
+console.log('Deleting event with id:', id, typeof id);
+
+          const data = await response.text();
+          console.log('Delete response:', data);
+
+          if (!response.ok) {
+            throw new Error(`Failed to delete event: ${response.status}`);
+          }
+
+          setEvents(prev => prev.filter(ev => ev._id !== id));
+          Alert.alert('Success', 'Event deleted successfully');
+        } catch (error) {
+          console.error('Error deleting event:', error);
+          Alert.alert('Error', String(error));
+        }
+      },
+    },
+  ]);
+};
+
 
   const serverToLocal = (ev: any): EventItem => ({
     _id: ev._id,
@@ -106,6 +155,22 @@ const HomePage = ({ username, userId: propUserId }: any) => {
     bgColor: colors[Math.floor(Math.random() * colors.length)],
     timeRemaining: computeTimeRemaining(ev.date, ev.time),
   });
+  // Auto-update remaining time every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEvents(prevEvents =>
+        prevEvents.map(ev => ({
+          ...ev,
+          timeRemaining: computeTimeRemaining(
+            ddmmyyyyToISO(ev.date),
+            ev.taskTime,
+          ),
+        })),
+      );
+    }, 60000); // every 1 minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   // FETCH EVENTS
   const fetchEvents = async () => {
@@ -114,8 +179,22 @@ const HomePage = ({ username, userId: propUserId }: any) => {
       const res = await fetch(`${API_BASE}/events/${userId}`);
       if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
-      setEvents(data.map(serverToLocal));
-    } catch (err: any) {
+      const mappedEvents = data.map(serverToLocal);
+      setEvents(mappedEvents);
+
+      // Schedule reminders for all upcoming events
+      mappedEvents.forEach(event => {
+        if (event.taskTime && event.date) {
+          NotificationService.scheduleReminder(
+            event.title,
+            `Reminder: ${event.title} starts soon!`,
+            ddmmyyyyToISO(event.date),
+            event.taskTime,
+            parseInt(reminderBefore, 10),
+          );
+        }
+      });
+    } catch (err) {
       console.error('fetchEvents error', err);
       Alert.alert('Error fetching events', err.message ?? String(err));
     } finally {
@@ -125,6 +204,8 @@ const HomePage = ({ username, userId: propUserId }: any) => {
 
   useEffect(() => {
     fetchEvents();
+    const interval = setInterval(fetchEvents, 15 * 60 * 1000); // every 15 min
+    return () => clearInterval(interval);
   }, []);
 
   // EDIT OR ADD EVENT
@@ -137,6 +218,7 @@ const HomePage = ({ username, userId: propUserId }: any) => {
       description: editedEvent.description ?? '',
       date: ddmmyyyyToISO(editedEvent.date ?? selectedFullDate),
       time: editedEvent.taskTime ?? '',
+      reminderBefore: parseInt(reminderBefore, 10),
     };
 
     try {
@@ -162,6 +244,13 @@ const HomePage = ({ username, userId: propUserId }: any) => {
       }
 
       const mapped = serverToLocal(savedEvent);
+      NotificationService.scheduleReminder(
+        mapped.title,
+        `Reminder: ${mapped.title} starts soon!`,
+        ddmmyyyyToISO(mapped.date),
+        mapped.taskTime,
+        parseInt(reminderBefore, 10), // use dropdown value
+      );
 
       setEvents(prev => {
         if (editedEvent._id && editingIndex !== null) {
@@ -193,6 +282,8 @@ const HomePage = ({ username, userId: propUserId }: any) => {
   const filteredEvents = events.filter(
     event => event.date === selectedFullDate,
   );
+
+  console.log('filteredevents', filteredEvents);
 
   return (
     <View style={styles.container}>
@@ -339,6 +430,19 @@ const HomePage = ({ username, userId: propUserId }: any) => {
               }
             />
 
+
+            <View style={styles.picker}>
+              <Picker
+                selectedValue={reminderBefore}
+                onValueChange={value => setReminderBefore(value)}
+              >
+                <Picker.Item label="10 minutes" value="10" />
+                <Picker.Item label="30 minutes" value="30" />
+                <Picker.Item label="1 hour" value="60" />
+                <Picker.Item label="3 hours" value="180" />
+                <Picker.Item label="1 day" value="1440" />
+              </Picker>
+            </View>
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: '#ccc' }]}
@@ -346,6 +450,17 @@ const HomePage = ({ username, userId: propUserId }: any) => {
               >
                 <Text>Cancel</Text>
               </TouchableOpacity>
+
+              {editedEvent._id && (
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: '#ff4d4d' }]}
+                  onPress={() => handleDeleteEvent(editedEvent._id)} 
+
+                >
+                  <Text style={{ color: '#fff' }}>Delete</Text>
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: '#400AD6' }]}
                 onPress={handleSaveEdit}
@@ -419,6 +534,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 6,
     marginLeft: 10,
+  },
+  dropdownContainer: {
+    marginBottom: 10,
+  },
+  dropdownLabel: {
+    fontSize: 16,
+    marginBottom: 4,
+    color: '#333',
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
   },
 });
 
