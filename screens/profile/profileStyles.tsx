@@ -44,6 +44,7 @@ const profileStyles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500",
   },
+  
 });
 
 export default profileStyles;

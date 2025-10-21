@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   FlatList,
   StyleSheet,
@@ -20,14 +19,12 @@ import { Help } from '../../assets/Help';
 import { Logout } from '../../assets/Logout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
 const Profilepage = ({ username }: { username: string }) => {
   type ProfileStackParamList = {
     Profilepage: undefined;
     HelpScreen: undefined;
     ChangePassword: undefined;
-    Login:undefined
+    Login: undefined;
   };
 
   const [isEnabled, setIsEnabled] = useState(false);
@@ -40,9 +37,9 @@ const Profilepage = ({ username }: { username: string }) => {
 
   const navigation = useNavigation<ProfileNavigationProp>();
   const handleLogout = async () => {
-  await AsyncStorage.removeItem('user');
-  navigation.replace('Login');
-};
+    await AsyncStorage.removeItem('user');
+    navigation.replace('Login');
+  };
   const [isThemeEnabled, setIsThemeEnabled] = useState(false);
   const menuItems = [
     {
@@ -66,7 +63,8 @@ const Profilepage = ({ username }: { username: string }) => {
     { id: '6', title: 'Help', icon: <Help />, type: 'navigate-help' },
     { id: '7', title: 'Log out', icon: <Logout /> },
   ];
-
+  const name = username ? username.toUpperCase() : '';
+  const firstLetter = username ? username[0].toUpperCase() : '';
   return (
     <LinearGradient colors={['#4c1d95', '#ec4899']} style={styles.container}>
       {/* Header */}
@@ -76,11 +74,12 @@ const Profilepage = ({ username }: { username: string }) => {
 
       {/* Profile Info */}
       <View style={styles.profileSection}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/100' }}
-          style={styles.avatar}
-        />
-        <Text style={styles.username}>{username}</Text>
+        <View style={styles.avatarContainer}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{firstLetter}</Text>
+          </View>
+        </View>
+        <Text style={styles.username}>{name.toUpperCase()}</Text>
       </View>
 
       {/* Menu List */}
@@ -205,18 +204,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#ddd',
-    marginBottom: 10,
-  },
-  username: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-  },
   menuContainer: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.3)',
@@ -242,6 +229,43 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     color: 'black',
     fontWeight: '500',
+  },
+  avatarContainer: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8, // Android shadow
+    borderRadius: 60,
+  },
+
+  avatar: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ec4899', // fallback if gradient not applied
+  },
+
+  avatarText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 40,
+  },
+
+  username: {
+    color: '#2c2c2c',
+    fontWeight: 'bold',
+    fontSize: 22,
+    letterSpacing: 1,
+    marginTop: 10,
+  },
+
+  subText: {
+    color: '#666',
+    fontSize: 16,
+    marginTop: 4,
   },
 });
 export default Profilepage;

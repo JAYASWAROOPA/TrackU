@@ -19,7 +19,7 @@ export const TopAppBar: React.FC<TTopBar> = ({ children, name }) => {
       <Text style={styles.name}>{username}</Text>
 
       {/* Right side children */}
-      <View style={styles.rightChildren}>{children}</View>
+      <View >{children}</View>
     </View>
   );
 };
