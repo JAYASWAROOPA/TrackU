@@ -11,7 +11,7 @@ import ToDoBox from '../../components/toDoBox/ToDoBox';
 import { styles } from './style';
 
 const API_BASE =
-  Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
+  Platform.OS === 'android' ? "http://10.191.60.195:5000" : 'http://localhost:5000';
 
 type Task = {
   id: string;

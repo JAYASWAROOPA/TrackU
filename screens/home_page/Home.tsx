@@ -19,6 +19,8 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import NotificationService from '../../NotificationService';
 import { Picker } from '@react-native-picker/picker';
+import { RefreshControl } from 'react-native';
+import { useCallback } from 'react';
 
 interface EventItem {
   _id?: string;
@@ -42,7 +44,7 @@ const HomePage = ({ username, userId: propUserId }: any) => {
 
   const API_BASE =
     Platform.OS === 'android'
-      ? 'http://10.0.2.2:5000'
+      ? 'http://10.191.60.195:5000'
       : 'http://localhost:5000';
 
   const userId = propUserId ?? username ?? 'demo-user';
@@ -62,6 +64,7 @@ const HomePage = ({ username, userId: propUserId }: any) => {
   const [reminderBefore, setReminderBefore] = useState('10'); // default 10 minutes
   const [editedEvent, setEditedEvent] = useState<Partial<EventItem>>({});
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const formattedDate = today.toLocaleDateString('en-US', {
     month: 'long',
@@ -107,43 +110,42 @@ const HomePage = ({ username, userId: propUserId }: any) => {
     return `${hrs} hr${hrs > 1 ? 's' : ''} left ⏳`;
   };
   // DELETE EVENT
-const handleDeleteEvent = async (id?: string) => {
-  if (!id) {
-    Alert.alert('Error', 'No event ID found');
-    return;
-  }
+  const handleDeleteEvent = async (id?: string) => {
+    if (!id) {
+      Alert.alert('Error', 'No event ID found');
+      return;
+    }
 
-  Alert.alert('Delete Event', 'Are you sure you want to delete this event?', [
-    { text: 'Cancel', style: 'cancel' },
-    {
-      text: 'Delete',
-      style: 'destructive',
-      onPress: async () => {
-        try {
-          const response = await fetch(`${API_BASE}/events/${id}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-          });
-console.log('Deleting event with id:', id, typeof id);
+    Alert.alert('Delete Event', 'Are you sure you want to delete this event?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            const response = await fetch(`${API_BASE}/events/${id}`, {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+            });
+            console.log('Deleting event with id:', id, typeof id);
 
-          const data = await response.text();
-          console.log('Delete response:', data);
+            const data = await response.text();
+            console.log('Delete response:', data);
 
-          if (!response.ok) {
-            throw new Error(`Failed to delete event: ${response.status}`);
+            if (!response.ok) {
+              throw new Error(`Failed to delete event: ${response.status}`);
+            }
+
+            setEvents(prev => prev.filter(ev => ev._id !== id));
+            Alert.alert('Success', 'Event deleted successfully');
+          } catch (error) {
+            console.error('Error deleting event:', error);
+            Alert.alert('Error', String(error));
           }
-
-          setEvents(prev => prev.filter(ev => ev._id !== id));
-          Alert.alert('Success', 'Event deleted successfully');
-        } catch (error) {
-          console.error('Error deleting event:', error);
-          Alert.alert('Error', String(error));
-        }
+        },
       },
-    },
-  ]);
-};
-
+    ]);
+  };
 
   const serverToLocal = (ev: any): EventItem => ({
     _id: ev._id,
@@ -206,6 +208,12 @@ console.log('Deleting event with id:', id, typeof id);
     fetchEvents();
     const interval = setInterval(fetchEvents, 15 * 60 * 1000); // every 15 min
     return () => clearInterval(interval);
+  }, []);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    // Call your data fetch function here
+    fetchEvents().finally(() => setRefreshing(false));
   }, []);
 
   // EDIT OR ADD EVENT
@@ -288,7 +296,12 @@ console.log('Deleting event with id:', id, typeof id);
   return (
     <View style={styles.container}>
       <TopAppBar name={username} />
-      <ScrollView style={styles.body}>
+      <ScrollView
+        style={styles.body}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Text style={styles.header}>{formattedDate}</Text>
 
         <View style={styles.daysRow}>
@@ -430,7 +443,6 @@ console.log('Deleting event with id:', id, typeof id);
               }
             />
 
-
             <View style={styles.picker}>
               <Picker
                 selectedValue={reminderBefore}
@@ -454,8 +466,7 @@ console.log('Deleting event with id:', id, typeof id);
               {editedEvent._id && (
                 <TouchableOpacity
                   style={[styles.button, { backgroundColor: '#ff4d4d' }]}
-                  onPress={() => handleDeleteEvent(editedEvent._id)} 
-
+                  onPress={() => handleDeleteEvent(editedEvent._id)}
                 >
                   <Text style={{ color: '#fff' }}>Delete</Text>
                 </TouchableOpacity>

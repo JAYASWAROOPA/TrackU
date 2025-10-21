@@ -86,7 +86,7 @@ export default function SignIn({ navigation }: any) {
   // Base URL of backend (you already specified this)
   const BASE_URL =
     Platform.OS === 'android'
-      ? 'http://10.0.2.2:5000'
+      ? "http://10.191.60.195:5000"
       : 'http://localhost:5000';
 
   const handleLogin = async (_e?: GestureResponderEvent) => {

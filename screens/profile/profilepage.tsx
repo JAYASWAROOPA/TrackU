@@ -18,12 +18,16 @@ import { Password } from '../../assets/Password';
 import { Theme } from '../../assets/Theme';
 import { Help } from '../../assets/Help';
 import { Logout } from '../../assets/Logout';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const Profilepage = ({ username }: { username: string }) => {
   type ProfileStackParamList = {
     Profilepage: undefined;
     HelpScreen: undefined;
     ChangePassword: undefined;
+    Login:undefined
   };
 
   const [isEnabled, setIsEnabled] = useState(false);
@@ -35,6 +39,10 @@ const Profilepage = ({ username }: { username: string }) => {
   >;
 
   const navigation = useNavigation<ProfileNavigationProp>();
+  const handleLogout = async () => {
+  await AsyncStorage.removeItem('user');
+  navigation.replace('Login');
+};
   const [isThemeEnabled, setIsThemeEnabled] = useState(false);
   const menuItems = [
     {
@@ -153,13 +161,7 @@ const Profilepage = ({ username }: { username: string }) => {
                 <TouchableOpacity
                   style={styles.menuItem}
                   activeOpacity={0.6}
-                  onPress={() => {
-                    // Optional: Clear async storage or any auth tokens here
-                    navigation.reset({
-                      index: 0,
-                      routes: [{ name: 'Login' }],
-                    });
-                  }}
+                  onPress={handleLogout}
                 >
                   <View style={styles.menuLeft}>
                     {item.icon}

@@ -19,7 +19,7 @@ export default function ChangePassword({ username }: { username: string }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const API_BASE =
     Platform.OS === 'android'
-      ? 'http://10.0.2.2:5000'
+      ? "http://10.191.60.195:5000"
       : 'http://localhost:5000';
   const handleChangePassword = async () => {
   if (!currentPassword || !newPassword || !confirmPassword) {

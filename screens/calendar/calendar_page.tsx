@@ -32,10 +32,8 @@ const CalendarPage=({ username, userId: propUserId }: any)=>{
   const fadeAnim = useState(new Animated.Value(0))[0];
 
   let BACKEND_URL = '';
-  if (Platform.OS === 'android') BACKEND_URL = 'http://10.0.2.2:5000';
+  if (Platform.OS === 'android') BACKEND_URL = "http://10.191.60.195:5000";
   else if (Platform.OS === 'ios') BACKEND_URL = 'http://localhost:5000';
-  else BACKEND_URL = 'http://192.168.1.100:5000';
-
   const userId = propUserId ?? username ?? "demo-user";
 
   const months = [
