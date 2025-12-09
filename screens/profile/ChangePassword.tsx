@@ -11,16 +11,14 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-
+import { API_BASE } from '../../config';
 export default function ChangePassword({ username }: { username: string }) {
   const navigation = useNavigation();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const API_BASE =
-    Platform.OS === 'android'
-      ? "http://10.191.60.195:5000"
-      : 'http://localhost:5000';
+  // const API_BASE =
+  //    Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
   const handleChangePassword = async () => {
   if (!currentPassword || !newPassword || !confirmPassword) {
     Alert.alert('Error', 'Please fill all fields');

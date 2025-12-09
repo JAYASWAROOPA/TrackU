@@ -17,6 +17,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import { API_BASE } from '../../config';
 
 type NewEvent = {
   date: string;
@@ -28,10 +29,8 @@ type NewEvent = {
 type EventItem = NewEvent & { bgColor: string; _id: string };
 
 const SetUPpage = ({ username, userId: propUserId }: any) => {
-  const BASE_URL =
-    Platform.OS === 'android'
-      ? "http://10.191.60.195:5000"
-      : 'http://localhost:5000';
+  const BASE_URL =API_BASE
+    // Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
   const USER_ID = propUserId ?? username ?? 'demo-user';
 
   const [events, setEvents] = useState<EventItem[]>([]);

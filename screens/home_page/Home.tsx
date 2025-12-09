@@ -7,7 +7,7 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
-  Platform,
+  // Platform,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -21,6 +21,7 @@ import NotificationService from '../../NotificationService';
 import { Picker } from '@react-native-picker/picker';
 import { RefreshControl } from 'react-native';
 import { useCallback } from 'react';
+import { API_BASE } from '../../config';
 
 interface EventItem {
   _id?: string;
@@ -42,11 +43,8 @@ const HomePage = ({ username, userId: propUserId }: any) => {
   //   },
   // );
 
-  const API_BASE =
-    Platform.OS === 'android'
-      ? 'http://10.191.60.195:5000'
-      : 'http://localhost:5000';
-
+  // const API_BASE =
+  //    Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
   const userId = propUserId ?? username ?? 'demo-user';
 
   const today = new Date();

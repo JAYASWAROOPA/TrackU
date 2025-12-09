@@ -4,14 +4,14 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  Platform,
   Alert,
 } from 'react-native';
 import ToDoBox from '../../components/toDoBox/ToDoBox';
 import { styles } from './style';
+import { API_BASE } from '../../config';
 
-const API_BASE =
-  Platform.OS === 'android' ? "http://10.191.60.195:5000" : 'http://localhost:5000';
+// const API_BASE =
+//   Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
 
 type Task = {
   id: string;
@@ -46,7 +46,7 @@ export default function ToDoList({ username, userId: propUserId }: any) {
                 // remove task if completed and created more than 1 minute ago
                 if (t.isCompleted && t.createdAt) {
                   const diff = now - new Date(t.createdAt).getTime();
-                  return diff < 24 * 60 * 60 * 1000; 
+                  return diff < 24 * 60 * 60 * 1000;
                 }
                 return true;
               }),

@@ -13,7 +13,7 @@ import {
 import { styles } from './Styles';
 import LinearGradient from 'react-native-linear-gradient';
 import { AddIcon } from '../../assets/AddIcon';
-
+import { API_BASE } from '../../config';
 type EventType = {
   _id: string;
   userId: string;
@@ -31,11 +31,10 @@ const CalendarPage=({ username, userId: propUserId }: any)=>{
   const [successMessage, setSuccessMessage] = useState('');
   const fadeAnim = useState(new Animated.Value(0))[0];
 
-  let BACKEND_URL = '';
-  if (Platform.OS === 'android') BACKEND_URL = "http://10.191.60.195:5000";
-  else if (Platform.OS === 'ios') BACKEND_URL = 'http://localhost:5000';
+  let BACKEND_URL = API_BASE;
+  // if (Platform.OS === 'android') BACKEND_URL =  'http://10.0.2.2:5000';
+  // else if (Platform.OS === 'ios') BACKEND_URL = 'http://localhost:5000';
   const userId = propUserId ?? username ?? "demo-user";
-
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
