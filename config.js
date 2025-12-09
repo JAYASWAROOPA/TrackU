@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-const isProduction = true;  // set false while developing
+const isProduction = false;  // set false while developing
 
 export const API_BASE = isProduction
   ? "https://passionate-reverence-production-0490.up.railway.app"
